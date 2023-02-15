@@ -1,0 +1,47 @@
+﻿@page "/items"
+@using System.Net.Http.Json;
+
+
+@inject HttpClient httpClient;
+@inject IBaraaService BaraaService
+
+<PageTitle>Index</PageTitle>
+
+@if (Baraanuud == null)
+{
+    <h3>Loading ...</h3>
+}
+else
+{
+    <h3>Baraa</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var baraa in Baraanuud)
+            {
+                <tr>
+                    <td>@baraa.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private Baraa[]? Baraanuud;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Baraanuud = await httpClient.GetFromJsonAsync<Baraa[]>("api/Baraa");
+        //HttpResponseMessage response = await httpClient.GetAsync("api/Baraa");
+        //response.EnsureSuccessStatusCode();
+        //string responseBody = await response.Content.ReadAsStringAsync();
+        //Console.WriteLine(responseBody);
+    }
+}
+
