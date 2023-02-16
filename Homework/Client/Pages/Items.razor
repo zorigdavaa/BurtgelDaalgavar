@@ -1,9 +1,6 @@
 ﻿@page "/items"
 @using System.Net.Http.Json;
-
-
-@inject HttpClient httpClient;
-@inject IBaraaService BaraaService
+@inject IBaraaService baraaservice;
 
 <PageTitle>Index</PageTitle>
 
@@ -37,7 +34,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Baraanuud = await httpClient.GetFromJsonAsync<Baraa[]>("api/Baraa");
+        await baraaservice.GetItemsAsync();
+        Baraanuud = baraaservice.Items.ToArray();
         //HttpResponseMessage response = await httpClient.GetAsync("api/Baraa");
         //response.EnsureSuccessStatusCode();
         //string responseBody = await response.Content.ReadAsStringAsync();
