@@ -10,6 +10,9 @@ namespace Homework.Client.Services.BaraaService
         public Task<Baraa> GetItemAsync(int id);
         public Task GetWareHousesAsync();
         public Task<WareHouse> GetWareHouseAsync(int id);
+        public Task RemoveItem(int id);
+        public Task AddItemAsync(Baraa addingBaraa);
+        public Task EditItem(Baraa editingBaraa);
 
     }
 }

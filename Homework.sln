@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework.Server", "Homework\Server\Homework.Server.csproj", "{CF634EE7-4A30-46C7-8ED0-73197056882A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homework.Server", "Homework\Server\Homework.Server.csproj", "{CF634EE7-4A30-46C7-8ED0-73197056882A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework.Client", "Homework\Client\Homework.Client.csproj", "{E5C52AD1-46C4-48AC-8BA5-EB689FF58B1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homework.Client", "Homework\Client\Homework.Client.csproj", "{E5C52AD1-46C4-48AC-8BA5-EB689FF58B1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework.Shared", "Homework\Shared\Homework.Shared.csproj", "{4F9424D3-EC57-441C-8089-55F426132B0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homework.Shared", "Homework\Shared\Homework.Shared.csproj", "{4F9424D3-EC57-441C-8089-55F426132B0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

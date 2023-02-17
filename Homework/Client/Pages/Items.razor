@@ -9,36 +9,131 @@
 }
 else
 {
-    <h3>Baraa</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var baraa in Baraanuud)
-            {
+    <div @onkeydown="HandleKeyDown">
+
+
+        <h3>Baraa</h3>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@baraa.Name</td>
+                    <th>Name</th>
+                    <th>Measure Unit</th>
+                    <th>Price</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var baraa in Baraanuud)
+                {
+                    <tr>
+                        <td>@baraa.Name</td>
+                        <td>@baraa.Meas</td>
+                        <td>@baraa.Price</td>
+                        <td><button type="button" class="btn btn-primary" @onclick="e=>OnDeleteButtonClick(baraa.Id)">Remove</button></td>
+                        <td><button type="button" class="btn btn-primary" @onclick="e=>OnEditButtonClick(baraa)">Remove</button></td>
+                    </tr>
+                }
+                <tr>
+                    <td><input type="text" @bind="@newBaraa.Name" /></td>
+                    <td>
+                        <select @bind="@newBaraa.Meas" id="cars" name="cars">
+                            <option value="@UnitMeas.Undefined">Undefined</option>
+                            <option value="@UnitMeas.Boodol">Boodol</option>
+                            <option value="@UnitMeas.Box">Box</option>
+                            <option value="@UnitMeas.Gallon">Gallon</option>
+                            <option value="@UnitMeas.KG">KG</option>
+                            <option value="@UnitMeas.Litr">Litr</option>
+                            <option value="@UnitMeas.Unit">Unit</option>>
+                        </select>
+                    </td>
+                    <td><input type="number" @bind="@newBaraa.Price" /></td>
+                    <td><button type="button" class="btn btn-primary" @onclick="e=>OnAddButtonClick()">add new Item</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>WareHouses</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var warehouse in WareHouses)
+                {
+                    <tr>
+                        <td>@warehouse.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <Modal @ref="Modal"></Modal>
+    </div>
 }
 
 
+
 @code {
-    private Baraa[]? Baraanuud;
+    private List<Baraa>? Baraanuud;
+    Baraa newBaraa = new Baraa();
+    private List<WareHouse>? WareHouses;
+    Modal Modal;
 
     protected override async Task OnInitializedAsync()
     {
-        await baraaservice.GetItemsAsync();
-        Baraanuud = baraaservice.Items.ToArray();
+        await RefreshBaraa();
+        await baraaservice.GetWareHousesAsync();
+        WareHouses = baraaservice.WareHouses;
         //HttpResponseMessage response = await httpClient.GetAsync("api/Baraa");
         //response.EnsureSuccessStatusCode();
         //string responseBody = await response.Content.ReadAsStringAsync();
         //Console.WriteLine(responseBody);
+    }
+    public async Task OnAddButtonClick()
+    {
+        if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
+        {
+            Console.WriteLine("Added " + newBaraa);
+            await baraaservice.AddItemAsync(newBaraa);
+            newBaraa = new Baraa();
+            await RefreshBaraa();
+        }
+        else
+        {
+            Console.WriteLine("InValid Baraa");
+        }
+    }
+    public async Task OnDeleteButtonClick(int id)
+    {
+        Console.WriteLine("Clicked " + id);
+        await baraaservice.RemoveItem(id);
+        await RefreshBaraa();
+    }
+    public async Task OnEditButtonClick(Baraa baraa)
+    {
+        Console.WriteLine("Edited " + baraa.Id);
+        Modal.Open(baraa);
+        await RefreshBaraa();
+    }
+    public async Task RefreshBaraa()
+    {
+        await baraaservice.GetItemsAsync();
+        Baraanuud = baraaservice.Items;
+        foreach (var item in Baraanuud)
+        {
+            Console.WriteLine(item.Price);
+        }
+    }
+    public void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "e")
+        {
+            Modal.Open();
+        }
+        else if (e.Key == "q")
+        {
+            Modal.Close();
+        }
     }
 }
 

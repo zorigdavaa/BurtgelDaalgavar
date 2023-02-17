@@ -10,13 +10,12 @@ namespace Shared
     {
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
-        public UnitMeas UnitMeasUnitMeas { get; set; }
-        public int Price;
-        public WareHouse? WareHouse { get; set; }
-   
+        public int Price { get; set; }
+        public UnitMeas Meas { get; set; }
+
     }
     public enum UnitMeas
     {
-        Undefined,KG,Litr,Unit,Gallon,Boodol,Box
+        Undefined, KG, Litr, Unit, Gallon, Boodol, Box
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,9 +11,9 @@ namespace ServerMVC.Controllers
     {
         // GET: api/<WareHouseController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<List<WareHouse>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(BaraaController.wareHouses);
         }
 
         // GET api/<WareHouseController>/5
