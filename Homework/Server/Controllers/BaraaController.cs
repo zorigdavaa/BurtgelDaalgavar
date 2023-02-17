@@ -55,12 +55,14 @@ namespace ServerMVC.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] Baraa value)
         {
+            //Baraa baraa = baraaList.Find(x=>x.Id == id);
             Baraa editn = baraaList.FirstOrDefault(x => x.Id == id);
+            int index = baraaList.IndexOf(editn);
             if (editn == null)
             {
                 return NotFound();
             }
-            editn = value;
+            baraaList[index] = value;
             return Ok();
         }
 

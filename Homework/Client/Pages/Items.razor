@@ -1,5 +1,6 @@
 ﻿@page "/items"
 @inject IBaraaService baraaservice;
+@inject JsInterop js;
 
 <PageTitle>Index</PageTitle>
 
@@ -29,7 +30,7 @@ else
                         <td>@baraa.Meas</td>
                         <td>@baraa.Price</td>
                         <td><button type="button" class="btn btn-primary" @onclick="e=>OnDeleteButtonClick(baraa.Id)">Remove</button></td>
-                        <td><button type="button" class="btn btn-primary" @onclick="e=>OnEditButtonClick(baraa)">Remove</button></td>
+                        <td><button type="button" class="btn btn-primary" @onclick="e=>OnEditButtonClick(baraa)">Edit</button></td>
                     </tr>
                 }
                 <tr>
@@ -67,7 +68,28 @@ else
                 }
             </tbody>
         </table>
-        <Modal @ref="Modal"></Modal>
+        <Modal @ref="Modal" OnSaveChanges="OnModalSave">
+            <Title>
+                Edit Item
+            </Title>
+            <Body>
+            <td><input type="text" @bind="Modal.editingBaraa.Name" /></td>
+            <br>    
+            <td>
+                <select @bind="@Modal.editingBaraa.Meas" id="cars" name="cars">
+                    <option value="@UnitMeas.Undefined">Undefined</option>
+                    <option value="@UnitMeas.Boodol">Boodol</option>
+                    <option value="@UnitMeas.Box">Box</option>
+                    <option value="@UnitMeas.Gallon">Gallon</option>
+                    <option value="@UnitMeas.KG">KG</option>
+                    <option value="@UnitMeas.Litr">Litr</option>
+                    <option value="@UnitMeas.Unit">Unit</option>>
+                </select>
+            </td>
+            <br>
+            <td><input type="number" @bind="@Modal.editingBaraa.Price" /></td>
+            </Body>
+        </Modal>
     </div>
 }
 
@@ -101,6 +123,7 @@ else
         else
         {
             Console.WriteLine("InValid Baraa");
+            await js.Alert("Бараа бүрэн бус байна");
         }
     }
     public async Task OnDeleteButtonClick(int id)
@@ -112,17 +135,12 @@ else
     public async Task OnEditButtonClick(Baraa baraa)
     {
         Console.WriteLine("Edited " + baraa.Id);
-        Modal.Open(baraa);
-        await RefreshBaraa();
+        await Task.Run(() => Modal.Open(baraa));
     }
     public async Task RefreshBaraa()
     {
         await baraaservice.GetItemsAsync();
         Baraanuud = baraaservice.Items;
-        foreach (var item in Baraanuud)
-        {
-            Console.WriteLine(item.Price);
-        }
     }
     public void HandleKeyDown(KeyboardEventArgs e)
     {
@@ -134,6 +152,13 @@ else
         {
             Modal.Close();
         }
+    }
+    public async Task OnModalSave()
+    {
+        Modal.Close();
+        await baraaservice.EditItem(Modal.editingBaraa);
+        //Modal.ResetBaraa();
+        await RefreshBaraa();
     }
 }
 

@@ -28,7 +28,7 @@ namespace Homework.Client.Services.BaraaService
 
         public async Task EditItem(Baraa editingBaraa)
         {
-            await _httpClient.PutAsJsonAsync("api/Baraa" + editingBaraa.Id, editingBaraa);
+            await _httpClient.PutAsJsonAsync("api/Baraa/" + editingBaraa.Id, editingBaraa);
         }
 
         public Task<Baraa> GetItemAsync(int id)

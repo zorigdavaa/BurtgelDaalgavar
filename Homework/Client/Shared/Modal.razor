@@ -16,7 +16,7 @@
                 {
                     @Footer;
                 }
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" @onclick="()=> SaveChanges()">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">Close</button>
             </div>
         </div>
@@ -34,7 +34,8 @@
     [Parameter] public RenderFragment Title { get; set; }
     [Parameter] public RenderFragment Body { get; set; }
     [Parameter] public RenderFragment? Footer { get; set; }
-    Baraa? editingBaraa;
+    [Parameter] public EventCallback<string> OnSaveChanges { get; set; }
+    [Parameter] public Baraa editingBaraa { get; set; } = new Baraa();
 
     public Guid Guid = Guid.NewGuid();
     public string ModalDisplay = "none;";
@@ -63,5 +64,13 @@
         ModalClass = "";
         ShowBackdrop = false;
         StateHasChanged();
+    }
+    public async Task SaveChanges()
+    {
+        await OnSaveChanges.InvokeAsync();
+    }
+    public void ResetBaraa()
+    {
+        editingBaraa = new Baraa();
     }
 }
