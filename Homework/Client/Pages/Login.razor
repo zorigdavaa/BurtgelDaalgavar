@@ -1,0 +1,18 @@
+﻿@page "/Login"
+<PageTitle>Login</PageTitle>
+
+<h3>Login</h3>
+<EditForm Model="@modeUser" OnValidSubmit="OnValidSubmit" >
+    <label>Email </label>
+    <InputText @bind-Value="modeUser.Email">Email</InputText>
+    <label>Pasword </label>
+    <InputText type="password" @bind-Value="modeUser.Password">Password</InputText>
+</EditForm>
+
+@code {
+    public Userr modeUser = new Userr();
+    public void OnValidSubmit()
+    {
+
+    }
+}
