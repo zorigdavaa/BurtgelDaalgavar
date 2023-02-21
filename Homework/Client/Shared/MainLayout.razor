@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject AppState state;
 
 <div class="page">
     <div class="sidebar">
@@ -15,3 +17,16 @@
         </article>
     </main>
 </div>
+
+
+@code {
+
+    protected async override Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+        if (!state.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(NavigationManager.Uri)}");
+        }
+    }
+}

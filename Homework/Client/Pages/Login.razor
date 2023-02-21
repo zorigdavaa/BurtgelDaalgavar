@@ -1,18 +1,54 @@
 ﻿@page "/Login"
+
+@inject NavigationManager navman;
+@inject AppState state;
+@inject IUserService userService;
+
 <PageTitle>Login</PageTitle>
 
 <h3>Login</h3>
-<EditForm Model="@modeUser" OnValidSubmit="OnValidSubmit" >
+<EditForm Model="@modeUser" OnValidSubmit="OnValidSubmit">
     <label>Email </label>
-    <InputText @bind-Value="modeUser.Email">Email</InputText>
+    <InputText @onkeydown="SeeModel" @bind-Value="modeUser.Email">Email</InputText>
     <label>Pasword </label>
     <InputText type="password" @bind-Value="modeUser.Password">Password</InputText>
+    <button type="submit">Submit</button>
 </EditForm>
 
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "returnUrl")]
+    public string returningUrl { get; set; } = String.Empty;
     public Userr modeUser = new Userr();
-    public void OnValidSubmit()
+    protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(100);
+        Console.WriteLine("return is " + returningUrl);
+    }
+    void SeeModel(KeyboardEventArgs e)
+    {
+        if (e.Key == "e")
+        {
 
+            Console.WriteLine(modeUser.Password + " " + modeUser.Email);
+        }
+    }
+
+    public async Task OnValidSubmit()
+    {
+        Console.WriteLine("Submitted");
+        bool response = await userService.Login(modeUser);
+        state.IsAuthenticated = response;
+        if (response)
+        {
+            if (String.IsNullOrEmpty(returningUrl))
+            {
+                navman.NavigateTo("/items");
+            }
+            else
+            {
+                navman.NavigateTo(returningUrl);
+            }
+        }
     }
 }

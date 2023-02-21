@@ -15,10 +15,11 @@ namespace Homework.Server.Controllers
             new Userr{ Id = 1, Name = "Admin", Email = "Admin@gmail.com", Password = "123"}
         };
 
-        // GET: api/<UserController>
-        [HttpGet]
-        public ActionResult<Userr> Get([FromBody] Userr user)
+        // Post: api/<UserController>
+        [HttpPost]
+        public ActionResult<Userr> Post([FromBody] Userr user)
         {
+            Console.WriteLine(user.Password + " " + user.Email);
             Userr foundUser = Users.FirstOrDefault(x => x.Email == user.Email);
             if (foundUser == null)
             {
@@ -33,22 +34,22 @@ namespace Homework.Server.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public void Get(int id)
         {
-            Userr user = Users.FirstOrDefault(x => x.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
+            //Userr user = Users.FirstOrDefault(x => x.Id == id);
+            //if (user == null)
+            //{
+            //    return NotFound();
+            //}
+            //return Ok(user);
         }
 
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] Userr user)
-        {
-            Users.Add(user);
-        }
+        //// POST api/<UserController>
+        //[HttpPost]
+        //public void Post([FromBody] Userr user)
+        //{
+        //    Users.Add(user);
+        //}
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
