@@ -13,9 +13,11 @@ namespace Homework.Client.Services.UserService
         }
         public async Task<bool> Login(Userr user)
         {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Post, "api/User");
+            HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7234/api/user");
             var json = JsonSerializer.Serialize(user);
+            Console.WriteLine(json);
             httpRequest.Content = new StringContent(json);
+            httpRequest.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = await _httpClient.SendAsync(httpRequest);
             return response.IsSuccessStatusCode;
 

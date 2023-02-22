@@ -40,6 +40,16 @@
 
 
 @code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        state.authenticationChanged += OnAuthenticationChanged;
+    }
+    void OnAuthenticationChanged(object sender, EventArgs e)
+    {
+        Console.WriteLine("Called event");
+        StateHasChanged();
+    }
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

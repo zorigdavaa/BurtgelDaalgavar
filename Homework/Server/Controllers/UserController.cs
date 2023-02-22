@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Homework.Shared;
 using Shared;
+using System.Diagnostics;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,21 +13,22 @@ namespace Homework.Server.Controllers
     {
         public static List<Userr> Users = new List<Userr>
         {
-            new Userr{ Id = 1, Name = "Admin", Email = "Admin@gmail.com", Password = "123"}
+            new Userr{ Id = 1, Name = "Admin", Email = "admin@gmail.com", Password = "123"}
         };
 
         // Post: api/<UserController>
         [HttpPost]
         public ActionResult<Userr> Post([FromBody] Userr user)
         {
-            Console.WriteLine(user.Password + " " + user.Email);
-            Userr foundUser = Users.FirstOrDefault(x => x.Email == user.Email);
+            Debug.WriteLine("called post");
+            Userr foundUser = Users.FirstOrDefault(x => x.Email.ToLower() == user.Email);
             if (foundUser == null)
             {
                 return NotFound();
             }
             else if (foundUser.Password != user.Password)
             {
+                Console.WriteLine("pass " + user.Password + " coming " + foundUser.Password);
                 return BadRequest();
             }
             return Ok(user);
@@ -34,20 +36,23 @@ namespace Homework.Server.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public void Get(int id)
+        public ActionResult Get(int id)
         {
-            //Userr user = Users.FirstOrDefault(x => x.Id == id);
-            //if (user == null)
-            //{
-            //    return NotFound();
-            //}
-            //return Ok(user);
+            Debug.WriteLine("called get");
+            //Console.WriteLine("called get");
+            Userr user = Users.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         //// POST api/<UserController>
         //[HttpPost]
         //public void Post([FromBody] Userr user)
         //{
+        //    Debug.WriteLine($"Post {user.Id}");
         //    Users.Add(user);
         //}
 

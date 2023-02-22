@@ -7,12 +7,16 @@
 <PageTitle>Login</PageTitle>
 
 <h3>Login</h3>
-<EditForm Model="@modeUser" OnValidSubmit="OnValidSubmit">
+<br />
+<h3>Use email: admin@gmail.com and password: 123</h3>
+<br />
+<EditForm EditContext="editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
     <label>Email </label>
     <InputText @onkeydown="SeeModel" @bind-Value="modeUser.Email">Email</InputText>
     <label>Pasword </label>
     <InputText type="password" @bind-Value="modeUser.Password">Password</InputText>
-    <button type="submit">Submit</button>
+    <button type="submit" disabled="@(!editContext.Validate())">Submit</button>
 </EditForm>
 
 @code {
@@ -20,8 +24,10 @@
     [SupplyParameterFromQuery(Name = "returnUrl")]
     public string returningUrl { get; set; } = String.Empty;
     public Userr modeUser = new Userr();
+    EditContext editContext;
     protected override async Task OnInitializedAsync()
     {
+        editContext = new EditContext(modeUser);
         await Task.Delay(100);
         Console.WriteLine("return is " + returningUrl);
     }
@@ -36,11 +42,12 @@
 
     public async Task OnValidSubmit()
     {
-        Console.WriteLine("Submitted");
+        modeUser.Name = "asd";
         bool response = await userService.Login(modeUser);
         state.IsAuthenticated = response;
         if (response)
         {
+            
             if (String.IsNullOrEmpty(returningUrl))
             {
                 navman.NavigateTo("/items");
