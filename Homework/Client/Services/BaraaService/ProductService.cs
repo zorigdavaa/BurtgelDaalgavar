@@ -6,19 +6,19 @@ using static System.Net.WebRequestMethods;
 
 namespace Homework.Client.Services.BaraaService
 {
-    public class BaraaService : IBaraaService
+    public class ProductService : IProductService
     {
         HttpClient _httpClient;
-        public BaraaService(HttpClient httpClient)
+        public ProductService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
-        public List<Baraa> Items { get; set; } = new List<Baraa>();
+        public List<Product> Items { get; set; } = new List<Product>();
         public List<WareHouse> WareHouses { get; set; } = new List<WareHouse>();
 
-        public async Task AddItemAsync(Baraa addingBaraa)
+        public async Task AddItemAsync(Product addingBaraa)
         {
-            await _httpClient.PostAsJsonAsync("api/Baraa", addingBaraa);
+            await _httpClient.PostAsJsonAsync("api/Product", addingBaraa);
 
             //HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Post, "api/Baraa");
             //var json = JsonSerializer.Serialize(addingBaraa);
@@ -26,19 +26,19 @@ namespace Homework.Client.Services.BaraaService
             //await _httpClient.SendAsync(httpRequest);
         }
 
-        public async Task EditItem(Baraa editingBaraa)
+        public async Task EditItem(Product editingBaraa)
         {
-            await _httpClient.PutAsJsonAsync("api/Baraa/" + editingBaraa.Id, editingBaraa);
+            await _httpClient.PutAsJsonAsync("api/Product/" + editingBaraa.Id, editingBaraa);
         }
 
-        public Task<Baraa> GetItemAsync(int id)
+        public Task<Product> GetItemAsync(int id)
         {
             throw new NotImplementedException();
         }
 
         public async Task GetItemsAsync()
         {
-            var response = await _httpClient.GetFromJsonAsync<List<Baraa>>("api/Baraa");
+            var response = await _httpClient.GetFromJsonAsync<List<Product>>("api/Product");
             if (response != null)
             {
                 Items = response;
@@ -62,7 +62,7 @@ namespace Homework.Client.Services.BaraaService
 
         public async Task RemoveItem(int id)
         {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Delete, "api/Baraa/" + id);
+            HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Delete, "api/Product/" + id);
             await _httpClient.SendAsync(httpRequest);
         }
     }

@@ -47,14 +47,14 @@
         state.IsAuthenticated = response;
         if (response)
         {
-            
+
             if (String.IsNullOrEmpty(returningUrl))
             {
                 navman.NavigateTo("/items");
             }
             else
             {
-                navman.NavigateTo(returningUrl);
+                navman.NavigateTo(Uri.UnescapeDataString(returningUrl));
             }
         }
     }

@@ -35,7 +35,7 @@
     [Parameter] public RenderFragment Body { get; set; }
     [Parameter] public RenderFragment? Footer { get; set; }
     [Parameter] public EventCallback<string> OnSaveChanges { get; set; }
-    [Parameter] public Baraa editingBaraa { get; set; } = new Baraa();
+    [Parameter] public Product editingBaraa { get; set; } = new Product();
 
     public Guid Guid = Guid.NewGuid();
     public string ModalDisplay = "none;";
@@ -49,7 +49,7 @@
         ShowBackdrop = true;
         StateHasChanged();
     }
-    public void Open(Baraa baraa)
+    public void Open(Product baraa)
     {
         editingBaraa = baraa;
         ModalDisplay = "block;";
@@ -71,6 +71,6 @@
     }
     public void ResetBaraa()
     {
-        editingBaraa = new Baraa();
+        editingBaraa = new Product();
     }
 }

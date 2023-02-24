@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public class Baraa
+    public class Product
     {
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
-        public int Price { get; set; }
+        public double Price { get; set; }
         public UnitMeas Meas { get; set; }
-
+        public int Count;
     }
     public enum UnitMeas
     {

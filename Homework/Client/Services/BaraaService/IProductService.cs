@@ -2,17 +2,17 @@
 
 namespace Homework.Client.Services.BaraaService
 {
-    public interface IBaraaService
+    public interface IProductService
     {
-        public List<Baraa> Items { get; set; }
+        public List<Product> Items { get; set; }
         public List<WareHouse> WareHouses { get; set; }
         public Task GetItemsAsync();
-        public Task<Baraa> GetItemAsync(int id);
+        public Task<Product> GetItemAsync(int id);
         public Task GetWareHousesAsync();
         public Task<WareHouse> GetWareHouseAsync(int id);
         public Task RemoveItem(int id);
-        public Task AddItemAsync(Baraa addingBaraa);
-        public Task EditItem(Baraa editingBaraa);
+        public Task AddItemAsync(Product addingBaraa);
+        public Task EditItem(Product editingBaraa);
 
     }
 }

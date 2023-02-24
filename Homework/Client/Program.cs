@@ -12,7 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddSingleton<AppState>();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<IBaraaService, BaraaService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<JsInterop>();
 builder.Services.AddScoped<IUserService, UserService>();
 

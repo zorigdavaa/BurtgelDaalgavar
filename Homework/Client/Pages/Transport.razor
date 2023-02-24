@@ -1,55 +1,39 @@
-﻿@page "/items"
+﻿@page "/transport"
 
 @inject IProductService baraaservice;
 @inject JsInterop js;
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Transport</PageTitle>
 
-@if (Baraanuud == null)
+@if (WareHouses == null)
 {
     <h3>Loading ...</h3>
 }
 else
 {
     <div @onkeydown="HandleKeyDown">
-
-
-        <h3>Baraa</h3>
+        <h3>WareHouse</h3>
+        <h3>WareHouse</h3>
         <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Measure Unit</th>
-                    <th>Price</th>
+                    <th>Items</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var baraa in Baraanuud)
+                @foreach (var wareHouse in WareHouses)
                 {
                     <tr>
-                        <td>@baraa.Name</td>
-                        <td>@baraa.Meas</td>
-                        <td>@baraa.Price</td>
-                        <td><button type="button" class="btn btn-primary" @onclick="e=>OnDeleteButtonClick(baraa.Id)">Remove</button></td>
-                        <td><button type="button" class="btn btn-primary" @onclick="e=>OnEditButtonClick(baraa)">Edit</button></td>
+                        <td>@wareHouse.Name</td>
+                        @foreach (var item in wareHouse.Items)
+                        {
+                        <tr>
+                            <td>@item.Name</td>
+                        </tr>
+                        }
                     </tr>
                 }
-                <tr>
-                    <td><input type="text" @bind="@newBaraa.Name" /></td>
-                    <td>
-                        <select @bind="@newBaraa.Meas" id="cars" name="cars">
-                            <option value="@UnitMeas.Undefined">Undefined</option>
-                            <option value="@UnitMeas.Boodol">Boodol</option>
-                            <option value="@UnitMeas.Box">Box</option>
-                            <option value="@UnitMeas.Gallon">Gallon</option>
-                            <option value="@UnitMeas.KG">KG</option>
-                            <option value="@UnitMeas.Litr">Litr</option>
-                            <option value="@UnitMeas.Unit">Unit</option>>
-                        </select>
-                    </td>
-                    <td><input type="number" @bind="@newBaraa.Price" /></td>
-                    <td><button type="button" class="btn btn-primary" @onclick="e=>OnAddButtonClick()">add new Item</button></td>
-                </tr>
             </tbody>
         </table>
 
@@ -75,7 +59,7 @@ else
             </Title>
             <Body>
             <td><input type="text" @bind="Modal.editingBaraa.Name" /></td>
-            <br>    
+            <br>
             <td>
                 <select @bind="@Modal.editingBaraa.Meas" id="cars" name="cars">
                     <option value="@UnitMeas.Undefined">Undefined</option>
@@ -97,8 +81,7 @@ else
 
 
 @code {
-    private List<Product>? Baraanuud;
-    Product newBaraa = new Product();
+    WareHouse wareHouse = new WareHouse();
     private List<WareHouse>? WareHouses;
     Modal Modal;
 
@@ -114,18 +97,19 @@ else
     }
     public async Task OnAddButtonClick()
     {
-        if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
-        {
-            Console.WriteLine("Added " + newBaraa);
-            await baraaservice.AddItemAsync(newBaraa);
-            newBaraa = new Product();
-            await RefreshBaraa();
-        }
-        else
-        {
-            Console.WriteLine("InValid Baraa");
-            await js.Alert("Бараа бүрэн бус байна");
-        }
+        //if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
+        //{
+        //    Console.WriteLine("Added " + newBaraa);
+        //    await baraaservice.AddItemAsync(newBaraa);
+        //    newBaraa = new Baraa();
+        //    await RefreshBaraa();
+        //}
+        //else
+        //{
+        //    Console.WriteLine("InValid Baraa");
+        //    bool isConfirmed = await js.Confirm("Бараа бүрэн бус байна");
+        //    await js.Confirm("Бараа бүрэн бус байна");
+        //}
     }
     public async Task OnDeleteButtonClick(int id)
     {
@@ -141,7 +125,7 @@ else
     public async Task RefreshBaraa()
     {
         await baraaservice.GetItemsAsync();
-        Baraanuud = baraaservice.Items;
+        //Baraanuud = baraaservice.Items;
     }
     public void HandleKeyDown(KeyboardEventArgs e)
     {
