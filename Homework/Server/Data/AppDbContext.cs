@@ -12,7 +12,20 @@ namespace Homework.Server.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
                 : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
+            // Create a new instance of the DbContext with a new database name
+            var ss = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: "MyNewDatabase")
+                .Options;
+
+            using (var context = new AppDbContext(options))
+            {
+                // Do something with the context and the new database
+
+                // Dispose of the old DbContext instance to delete its in-memory database
+                context.Database.EnsureDeleted();
+                context.Dispose();
+            }
         }
         #endregion
 

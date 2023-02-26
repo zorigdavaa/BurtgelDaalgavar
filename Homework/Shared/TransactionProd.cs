@@ -9,11 +9,17 @@ namespace Homework.Shared
 {
     public class TransactionProd
     {
+
         public int Id { get; set; }
         public int Count { get; set; }
-        public DateTime TransactionDate { get; set; } = DateTime.Now;
-        public Product? Product { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public Product Product { get; set; } = new Product();
+
         public int FromWareHouseId { get; set; }
         public int ToWareHouseId { get; set;}
+        public double GetExpenses()
+        {
+            return Product.Price* Count;
+        }
     }
 }

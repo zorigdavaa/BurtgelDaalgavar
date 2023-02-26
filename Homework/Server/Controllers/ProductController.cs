@@ -1,5 +1,6 @@
 ﻿using Homework.Server.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared;
 using System.Linq;
 
@@ -29,7 +30,7 @@ namespace ServerMVC.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Product>>> Get()
         {
-            return Ok(_AppDb.Product.ToList());
+            return Ok(await _AppDb.Product.ToListAsync());
         }
 
         // GET api/<BaraaController>/5
@@ -37,7 +38,7 @@ namespace ServerMVC.Controllers
         public ActionResult<Product> Get(int id)
         {
             //Product baraa = baraaList.FirstOrDefault(x => x.Id == id);
-            Product baraa = _AppDb.Product.FirstOrDefault(x => x.Id == id);
+            Product? baraa = _AppDb.Product.FirstOrDefault(x => x.Id == id);
             if (baraa == null)
             {
                 return NotFound();
