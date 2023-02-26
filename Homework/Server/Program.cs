@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("newDB"));
+options.UseInMemoryDatabase("newDB"), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+;
 //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 

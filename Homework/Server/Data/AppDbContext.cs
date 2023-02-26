@@ -12,20 +12,8 @@ namespace Homework.Server.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
                 : base(options)
         {
+            //Debug.WriteLine($"Using database provider: {Database.ProviderName}");
             //Database.EnsureCreated();
-            // Create a new instance of the DbContext with a new database name
-            var ss = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "MyNewDatabase")
-                .Options;
-
-            using (var context = new AppDbContext(options))
-            {
-                // Do something with the context and the new database
-
-                // Dispose of the old DbContext instance to delete its in-memory database
-                context.Database.EnsureDeleted();
-                context.Dispose();
-            }
         }
         #endregion
 
@@ -44,17 +32,35 @@ namespace Homework.Server.Data
             modelBuilder.Entity<WareHouse>().HasData(GetWareHouses());
             base.OnModelCreating(modelBuilder);
         }
+
+        internal void DeleteDB()
+        {
+            Database.EnsureDeleted();
+            Dispose();
+        }
         #endregion
 
 
         #region Private methods
         private List<Product> GetProducts()
         {
-            return ProductController.baraaList;
+            return new List<Product>()
+                {
+                    new Product{Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG},
+                    new Product{Id = 2, Name = "Jims", Price = 20, Meas = UnitMeas.Boodol},
+                    new Product{Id = 3, Name = "Chocolate", Price = 30, Meas = UnitMeas.Box},
+                    new Product{Id = 4, Name = "Mashin", Price = 40, Meas = UnitMeas.Unit}
+                };
         }
         private List<WareHouse> GetWareHouses()
         {
-            return WareHouseController.wareHouses;
+            return new List<WareHouse>()
+                {
+                    new WareHouse() { Id = 1, Name = "Central"},
+                    new WareHouse() { Id = 2, Name = "West"},
+                    new WareHouse() { Id = 3, Name = "East"},
+                    new WareHouse() { Id = 4, Name = "North"}
+                };
         }
         #endregion
     }

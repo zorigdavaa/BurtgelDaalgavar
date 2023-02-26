@@ -18,17 +18,12 @@ namespace ServerMVC.Controllers
         {
             _db = db;
         }
-        public static List<WareHouse> wareHouses = new List<WareHouse>()
-        {
-            new WareHouse() { Id = 1, Name = "Central", Capacity = 200},
-            new WareHouse() { Id = 2, Name = "West", Capacity = 300},
-            new WareHouse() { Id = 3, Name = "East", Capacity = 300},
-            new WareHouse() { Id = 4, Name = "North", Capacity = 300}
-        };
+
         // GET: api/<WareHouseController>
         [HttpGet]
         public ActionResult<List<WareHouse>> Get()
         {
+            Debug.WriteLine("Count of warehouse if " + _db.WareHouse.ToList().Count);
             return Ok(_db.WareHouse.ToList());
         }
         // GET: api/<WareHouseController>/tra
@@ -105,10 +100,11 @@ namespace ServerMVC.Controllers
         {
         }
 
-        // DELETE api/<WareHouseController>/5
-        [HttpDelete("{id}")]
+        // DELETE api/<WareHouseController>/delete
+        [HttpGet("delete")]
         public void Delete(int id)
         {
+            _db.DeleteDB();
         }
     }
 }

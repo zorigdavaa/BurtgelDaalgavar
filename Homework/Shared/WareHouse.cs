@@ -11,7 +11,6 @@ namespace Shared
     {
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
-        public int Capacity { get; set; }
         public List<Product> Items { get; set; } = new List<Product>();
         //public WareHouse(string _name, int _cap)
         //{

@@ -18,14 +18,6 @@ namespace ServerMVC.Controllers
             _AppDb = db;
         }
 
-        public static List<Product> baraaList = new List<Product>()
-        {
-            new Product{Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG},
-            new Product{Id = 2, Name = "Jims", Price = 20, Meas = UnitMeas.Boodol},
-            new Product{Id = 3, Name = "Chocolate", Price = 30, Meas = UnitMeas.Box},
-            new Product{Id = 4, Name = "Mashin", Price = 40, Meas = UnitMeas.Unit}
-        };
-
         // GET: api/<BaraaController>
         [HttpGet]
         public async Task<ActionResult<List<Product>>> Get()
