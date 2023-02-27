@@ -27,7 +27,7 @@ else
                     <tr>
                         <td>@wareHouse.Name</td>
                         <td>
-                            <button @onclick="OnAddButtonClick">AddProducts</button>
+                            <button @onclick="()=> OnAddButtonClick(wareHouse.Id)">AddProducts</button>
                         </td>
                         @foreach (var item in wareHouse.Items)
                         {
@@ -91,22 +91,17 @@ else
         //string responseBody = await response.Content.ReadAsStringAsync();
         //Console.WriteLine(responseBody);
     }
-    public async Task OnAddButtonClick()
+    public async Task OnAddButtonClick(int warehouseId)
     {
-
-        //if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
-        //{
-        //    Console.WriteLine("Added " + newBaraa);
-        //    await baraaservice.AddItemAsync(newBaraa);
-        //    newBaraa = new Baraa();
-        //    await RefreshBaraa();
-        //}
-        //else
-        //{
-        //    Console.WriteLine("InValid Baraa");
-        //    bool isConfirmed = await js.Confirm("Бараа бүрэн бус байна");
-        //    await js.Confirm("Бараа бүрэн бус байна");
-        //}
+        TransactionProd prod = new TransactionProd();
+        prod.Product = new Product { Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG, Count = 10 };
+        prod.ToWareHouseId = warehouseId;
+        prod.FromWareHouseId = 0;
+        prod.TransactionDate = DateTime.Now;
+        prod.Id = 0;
+        await warehouseService.AddProductToWareHouse(prod);
+        await warehouseService.GetWareHousesAsync();
+        WareHouses = warehouseService.WareHouses;
     }
     public async Task OnDeleteButtonClick(int id)
     {

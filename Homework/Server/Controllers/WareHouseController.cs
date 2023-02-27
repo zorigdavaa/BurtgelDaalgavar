@@ -59,6 +59,7 @@ namespace ServerMVC.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] TransactionProd transfer)
         {
+            Debug.WriteLine("Post Warehouse");
             WareHouse? fromWareHouse = await _db.WareHouse.FindAsync(transfer.FromWareHouseId);
             WareHouse? toWarehouse = await _db.WareHouse.FindAsync(transfer.ToWareHouseId);
             Product? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Id == transfer.Product.Id);

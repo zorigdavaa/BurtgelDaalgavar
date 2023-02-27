@@ -24,7 +24,6 @@ namespace Homework.Client.Services.WarehouseService
             if (response != null)
             {
                 WareHouses = response;
-                Console.WriteLine(response.Count.ToString());
             }
         }
         public async Task AddProductToWareHouse(TransactionProd addingBaraa)
