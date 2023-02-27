@@ -14,7 +14,7 @@ namespace Homework.Client.Services.BaraaService
             _httpClient = httpClient;
         }
         public List<Product> Items { get; set; } = new List<Product>();
-        public List<WareHouse> WareHouses { get; set; } = new List<WareHouse>();
+
 
         public async Task AddItemAsync(Product addingBaraa)
         {
@@ -45,20 +45,7 @@ namespace Homework.Client.Services.BaraaService
             }
         }
 
-        public Task<WareHouse> GetWareHouseAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task GetWareHousesAsync()
-        {
-            var response = await _httpClient.GetFromJsonAsync<List<WareHouse>>("api/WareHouse");
-            if (response != null)
-            {
-                WareHouses = response;
-                Console.WriteLine(response.Count.ToString());
-            }
-        }
 
         public async Task RemoveItem(int id)
         {

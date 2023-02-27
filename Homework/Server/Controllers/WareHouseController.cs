@@ -67,11 +67,11 @@ namespace ServerMVC.Controllers
             {
                 if (transfer.FromWareHouseId != 0 && fromHouseProduct != null)
                 {
-                    if (fromHouseProduct.Count < transfer.Count)
+                    if (fromHouseProduct.Count < transfer.Product.Count)
                     {
                         return BadRequest();
                     }
-                    fromHouseProduct.Count -= transfer.Count;
+                    fromHouseProduct.Count -= transfer.Product.Count;
                     if (fromHouseProduct.Count < 1)
                     {
                         fromWareHouse.Items.Remove(fromHouseProduct);
@@ -80,12 +80,12 @@ namespace ServerMVC.Controllers
                 if (toWareHouseProduct == null)
                 {
                     Product addingProduct = transfer.Product;
-                    addingProduct.Count = transfer.Count;
+                    addingProduct.Count = transfer.Product.Count;
                     toWarehouse.Items.Add(addingProduct);
                 }
                 else
                 {
-                    toWareHouseProduct.Count += transfer.Count;
+                    toWareHouseProduct.Count += transfer.Product.Count;
                 }
                 _db.Transactions.Add(transfer);
                 _db.SaveChanges();

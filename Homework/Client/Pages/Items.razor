@@ -1,6 +1,7 @@
 ﻿@page "/items"
 
 @inject IProductService baraaservice;
+@inject IWarehouseService warehouseService;
 @inject JsInterop js;
 
 <PageTitle>Index</PageTitle>
@@ -105,8 +106,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         await RefreshBaraa();
-        await baraaservice.GetWareHousesAsync();
-        WareHouses = baraaservice.WareHouses;
+        await warehouseService.GetWareHousesAsync();
+        WareHouses = warehouseService.WareHouses;
         //HttpResponseMessage response = await httpClient.GetAsync("api/Baraa");
         //response.EnsureSuccessStatusCode();
         //string responseBody = await response.Content.ReadAsStringAsync();

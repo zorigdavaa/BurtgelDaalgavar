@@ -11,8 +11,11 @@ namespace Shared
         public int Id { get; set; }
         public string Name { get; set; } = String.Empty;
         public double Price { get; set; }
+        public double SellPrice => Price * 1.5;
         public UnitMeas Meas { get; set; }
-        public int Count;
+        public int Count { get; set; }
+        public int WareHouseId { get; set; }
+        public WareHouse WareHouse { get; set; }
     }
     public enum UnitMeas
     {

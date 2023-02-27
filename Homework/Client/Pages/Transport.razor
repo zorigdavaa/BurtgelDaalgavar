@@ -1,6 +1,7 @@
 ﻿@page "/transport"
 
 @inject IProductService baraaservice;
+@inject IWarehouseService warehouseService;
 @inject JsInterop js;
 
 <PageTitle>Transport</PageTitle>
@@ -12,7 +13,6 @@
 else
 {
     <div @onkeydown="HandleKeyDown">
-        <h3>WareHouse</h3>
         <h3>WareHouse</h3>
         <table class="table">
             <thead>
@@ -26,29 +26,26 @@ else
                 {
                     <tr>
                         <td>@wareHouse.Name</td>
+                        <td>
+                            <button @onclick="OnAddButtonClick">AddProducts</button>
+                        </td>
                         @foreach (var item in wareHouse.Items)
                         {
                         <tr>
                             <td>@item.Name</td>
                         </tr>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
+                        <tr>
+                            <td>
+                                <button>Sell</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button>Transfer</button>
+                            </td>
+                        </tr>
 
-        <h3>WareHouses</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var warehouse in WareHouses)
-                {
-                    <tr>
-                        <td>@warehouse.Name</td>
+                        }
                     </tr>
                 }
             </tbody>
@@ -87,9 +84,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await RefreshBaraa();
-        await baraaservice.GetWareHousesAsync();
-        WareHouses = baraaservice.WareHouses;
+        await warehouseService.GetWareHousesAsync();
+        WareHouses = warehouseService.WareHouses;
         //HttpResponseMessage response = await httpClient.GetAsync("api/Baraa");
         //response.EnsureSuccessStatusCode();
         //string responseBody = await response.Content.ReadAsStringAsync();
@@ -97,6 +93,7 @@ else
     }
     public async Task OnAddButtonClick()
     {
+
         //if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
         //{
         //    Console.WriteLine("Added " + newBaraa);
@@ -115,17 +112,11 @@ else
     {
         Console.WriteLine("Clicked " + id);
         await baraaservice.RemoveItem(id);
-        await RefreshBaraa();
     }
     public async Task OnEditButtonClick(Product baraa)
     {
         Console.WriteLine("Edited " + baraa.Id);
         await Task.Run(() => Modal.Open(baraa));
-    }
-    public async Task RefreshBaraa()
-    {
-        await baraaservice.GetItemsAsync();
-        //Baraanuud = baraaservice.Items;
     }
     public void HandleKeyDown(KeyboardEventArgs e)
     {
@@ -143,7 +134,6 @@ else
         Modal.Close();
         await baraaservice.EditItem(Modal.editingBaraa);
         //Modal.ResetBaraa();
-        await RefreshBaraa();
     }
 }
 

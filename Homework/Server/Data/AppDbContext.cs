@@ -13,7 +13,7 @@ namespace Homework.Server.Data
                 : base(options)
         {
             //Debug.WriteLine($"Using database provider: {Database.ProviderName}");
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
         #endregion
 
@@ -26,6 +26,10 @@ namespace Homework.Server.Data
         #region Overidden methods
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.WareHouse)
+                .WithMany(w => w.Items)
+                .HasForeignKey(p => p.WareHouseId);
 
             Debug.WriteLine("Model Creating " + modelBuilder);
             modelBuilder.Entity<Product>().HasData(GetProducts());
