@@ -120,12 +120,11 @@ else
             Console.WriteLine("Added " + newBaraa);
             ProductDTO baraa = new ProductDTO
                 {
-                    Id = newBaraa.Id,
-                    Count = newBaraa.Count,
+                    Count = 10,
                     Name = newBaraa.Name,
                     Meas = newBaraa.Meas,
                     Price = newBaraa.Price,
-                    //WareHouseId = newBaraa.WareHouseId.Value
+                    WareHouseId = 1
                 };
             await baraaservice.AddItemAsync(baraa);
             newBaraa = new Product();
@@ -170,11 +169,9 @@ else
         ProductDTO baraa = new ProductDTO
             {
                 Id = Modal.editingBaraa.Id,
-                Count = Modal.editingBaraa.Count,
                 Name = Modal.editingBaraa.Name,
                 Meas = Modal.editingBaraa.Meas,
                 Price = Modal.editingBaraa.Price,
-                WareHouseId = Modal.editingBaraa.WareHouseId.Value
             };
         await baraaservice.EditItem(baraa);
         //Modal.ResetBaraa();

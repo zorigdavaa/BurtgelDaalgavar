@@ -21,18 +21,19 @@ namespace Homework.Server.Data
         public DbSet<Product> Product { get; set; }
         public DbSet<WareHouse> WareHouse { get; set; }
         public DbSet<TransactionProd> Transactions { get; set; }
+        public DbSet<WareProduct> WareHouseProducts { get; set; }
         #endregion
 
         #region Overidden methods
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<WareProduct>()
                 .HasOne(p => p.WareHouse)
                 .WithMany(w => w.Items)
-                .HasForeignKey(p => p.WareHouseId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(p => p.WareHouseId);
+            //modelBuilder.Entity<WareHouse>()
+            //    .HasMany(w => w.Items);
 
-            Debug.WriteLine("Model Creating " + modelBuilder);
             modelBuilder.Entity<Product>().HasData(GetProducts());
             modelBuilder.Entity<WareHouse>().HasData(GetWareHouses());
             base.OnModelCreating(modelBuilder);
@@ -51,10 +52,10 @@ namespace Homework.Server.Data
         {
             return new List<Product>()
                 {
-                    new Product{Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG},
-                    new Product{Id = 2, Name = "Jims", Price = 20, Meas = UnitMeas.Boodol},
-                    new Product{Id = 3, Name = "Chocolate", Price = 30, Meas = UnitMeas.Box},
-                    new Product{Id = 4, Name = "Mashin", Price = 40, Meas = UnitMeas.Unit}
+                    new Product{Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG,Code = 1},
+                    new Product{Id = 2, Name = "Jims", Price = 20, Meas = UnitMeas.Boodol, Code = 2},
+                    new Product{Id = 3, Name = "Chocolate", Price = 30, Meas = UnitMeas.Box, Code = 3},
+                    new Product{Id = 4, Name = "Mashin", Price = 40, Meas = UnitMeas.Unit, Code = 4}
                 };
         }
         private List<WareHouse> GetWareHouses()

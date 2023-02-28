@@ -95,7 +95,6 @@ else
     {
         TransactionProd prod = new TransactionProd();
         //prod.Product = new Product { Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG, Count = 10 };
-        prod.ProductId = 1;
         prod.ProductName = "Chiher";
         prod.ProductPrice = 10;
         prod.ProductMeas = UnitMeas.KG;
@@ -103,7 +102,6 @@ else
         prod.ToWareHouseId = warehouseId;
         prod.FromWareHouseId = 0;
         prod.TransactionDate = DateTime.Now;
-        prod.Id = 0;
         await warehouseService.AddProductToWareHouse(prod);
         await warehouseService.GetWareHousesAsync();
         WareHouses = warehouseService.WareHouses;

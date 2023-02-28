@@ -47,12 +47,9 @@ namespace ServerMVC.Controllers
             Product product = new Product
             {
                 Id = addingBaraa.Id,
-                Count = addingBaraa.Count,
                 Meas = addingBaraa.Meas,
                 Name = addingBaraa.Name,
                 Price = addingBaraa.Price,
-                WareHouseId = addingBaraa.WareHouseId,
-                WareHouse = wareHouse
             };
             _AppDb.Product.Add(product);
             _AppDb.SaveChanges();

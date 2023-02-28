@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Homework.Shared.Entities
 {
-    public class Userr
+    public class Userr : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         [Required(ErrorMessage = "Email is Required")]
         [EmailAddress(ErrorMessage = "Email Address is Required")]

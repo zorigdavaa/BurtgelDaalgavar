@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Homework.Shared.Entities
 {
-    public class TransactionProd
+    public class TransactionProd : BaseEntity
     {
-        public int Id { get; set; }
         public DateTime TransactionDate { get; set; }
-        public int ProductId { get; set; }
+        public int ProductCode { get; set; }
         public string ProductName { get; set; } = String.Empty;
         public int ProductCount { get; set; }
         public int ProductPrice { get; set; }

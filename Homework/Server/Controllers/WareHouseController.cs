@@ -62,8 +62,8 @@ namespace ServerMVC.Controllers
             Debug.WriteLine("Post Warehouse");
             WareHouse? fromWareHouse = await _db.WareHouse.FindAsync(transfer.FromWareHouseId);
             WareHouse? toWarehouse = await _db.WareHouse.FindAsync(transfer.ToWareHouseId);
-            Product? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Id == transfer.ProductId);
-            Product? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Id == transfer.ProductId);
+            WareProduct? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Code == transfer.ProductCode);
+            WareProduct? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Code == transfer.ProductCode);
             if (toWarehouse != null)
             {
                 if (transfer.FromWareHouseId != 0 && fromHouseProduct != null)
@@ -79,21 +79,22 @@ namespace ServerMVC.Controllers
                     }
                     _db.SaveChanges();
                 }
-                Product addingProduct = new Product();
+                WareProduct addingProduct = new WareProduct();
                 if (toWareHouseProduct == null)
                 {
-                    addingProduct = new Product
+                    addingProduct = new WareProduct
                     {
-                        Id = transfer.ProductId,
                         Name = transfer.ProductName,
                         Count = transfer.ProductCount,
                         Meas = transfer.ProductMeas,
                         Price = transfer.ProductPrice,
                         WareHouse = toWarehouse,
-                        WareHouseId = toWarehouse.Id
+                        WareHouseId = toWarehouse.Id,
+                        Code = transfer.ProductCode
+
                     };
                     toWarehouse.Items.Add(addingProduct);
-
+                    //_db.WareHouseProducts.Add(addingProduct);
                 }
                 else
                 {
@@ -101,7 +102,7 @@ namespace ServerMVC.Controllers
                 }
                 _db.SaveChanges();
                 Debug.WriteLine("wareHouse Item Count is " + toWarehouse.Items.Count);
-                
+
                 _db.Transactions.Add(transfer);
                 _db.SaveChanges();
                 return Ok();

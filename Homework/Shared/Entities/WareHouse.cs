@@ -7,16 +7,9 @@ using System.Threading.Tasks;
 
 namespace Homework.Shared.Entities
 {
-    public class WareHouse
+    public class WareHouse : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public List<Product> Items { get; set; } = new List<Product>();
-        //public WareHouse(string _name, int _cap)
-        //{
-        //    Name = _name;
-        //    Capacity = _cap;
-        //    Items = new List<Baraa>();
-        //}
+        public List<WareProduct> Items { get; set; } = new List<WareProduct>();
     }
 }
