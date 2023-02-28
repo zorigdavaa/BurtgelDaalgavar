@@ -64,6 +64,7 @@ namespace ServerMVC.Controllers
             WareHouse? toWarehouse = await _db.WareHouse.FindAsync(transfer.ToWareHouseId);
             WareProduct? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Code == transfer.ProductCode);
             WareProduct? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Code == transfer.ProductCode);
+            Debug.WriteLineIf(toWareHouseProduct == null, "To is null ssssssssssssssss");
             if (toWarehouse != null)
             {
                 if (transfer.FromWareHouseId != 0 && fromHouseProduct != null)
@@ -77,7 +78,6 @@ namespace ServerMVC.Controllers
                     {
                         fromWareHouse.Items.Remove(fromHouseProduct);
                     }
-                    _db.SaveChanges();
                 }
                 WareProduct addingProduct = new WareProduct();
                 if (toWareHouseProduct == null)
@@ -100,7 +100,6 @@ namespace ServerMVC.Controllers
                 {
                     toWareHouseProduct.Count += transfer.ProductCount;
                 }
-                _db.SaveChanges();
                 Debug.WriteLine("wareHouse Item Count is " + toWarehouse.Items.Count);
 
                 _db.Transactions.Add(transfer);

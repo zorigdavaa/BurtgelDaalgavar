@@ -31,8 +31,11 @@ namespace Homework.Server.Data
                 .HasOne(p => p.WareHouse)
                 .WithMany(w => w.Items)
                 .HasForeignKey(p => p.WareHouseId);
-            //modelBuilder.Entity<WareHouse>()
-            //    .HasMany(w => w.Items);
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Code)
+                .ValueGeneratedOnAdd();
+
+
 
             modelBuilder.Entity<Product>().HasData(GetProducts());
             modelBuilder.Entity<WareHouse>().HasData(GetWareHouses());

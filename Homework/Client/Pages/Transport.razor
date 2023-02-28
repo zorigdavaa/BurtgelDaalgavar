@@ -102,6 +102,7 @@ else
         prod.ToWareHouseId = warehouseId;
         prod.FromWareHouseId = 0;
         prod.TransactionDate = DateTime.Now;
+        prod.ProductCode = 1;
         await warehouseService.AddProductToWareHouse(prod);
         await warehouseService.GetWareHousesAsync();
         WareHouses = warehouseService.WareHouses;
