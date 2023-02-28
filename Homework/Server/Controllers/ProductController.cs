@@ -3,6 +3,7 @@ using Homework.Shared.DTO;
 using Homework.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -43,13 +44,15 @@ namespace ServerMVC.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ProductDTO addingBaraa)
         {
-            WareHouse? wareHouse = await _AppDb.WareHouse.FindAsync(addingBaraa.WareHouseId);
+            //WareHouse? wareHouse = await _AppDb.WareHouse.FindAsync(addingBaraa.WareHouseId);
+            Debug.WriteLine("ssssssssssssssssss");
             Product product = new Product
             {
                 Id = addingBaraa.Id,
                 Meas = addingBaraa.Meas,
                 Name = addingBaraa.Name,
                 Price = addingBaraa.Price,
+                Code = 0
             };
             _AppDb.Product.Add(product);
             _AppDb.SaveChanges();
