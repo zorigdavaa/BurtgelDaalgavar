@@ -1,7 +1,7 @@
-﻿using Homework.Shared;
+﻿using Homework.Shared.DTO;
+using Homework.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using ServerMVC.Controllers;
-using Shared;
 using System.Diagnostics;
 
 namespace Homework.Server.Data
@@ -29,7 +29,8 @@ namespace Homework.Server.Data
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.WareHouse)
                 .WithMany(w => w.Items)
-                .HasForeignKey(p => p.WareHouseId);
+                .HasForeignKey(p => p.WareHouseId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             Debug.WriteLine("Model Creating " + modelBuilder);
             modelBuilder.Entity<Product>().HasData(GetProducts());

@@ -94,7 +94,12 @@ else
     public async Task OnAddButtonClick(int warehouseId)
     {
         TransactionProd prod = new TransactionProd();
-        prod.Product = new Product { Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG, Count = 10 };
+        //prod.Product = new Product { Id = 1, Name = "Chiher", Price = 10, Meas = UnitMeas.KG, Count = 10 };
+        prod.ProductId = 1;
+        prod.ProductName = "Chiher";
+        prod.ProductPrice = 10;
+        prod.ProductMeas = UnitMeas.KG;
+        prod.ProductCount = 10;
         prod.ToWareHouseId = warehouseId;
         prod.FromWareHouseId = 0;
         prod.TransactionDate = DateTime.Now;
@@ -102,6 +107,7 @@ else
         await warehouseService.AddProductToWareHouse(prod);
         await warehouseService.GetWareHousesAsync();
         WareHouses = warehouseService.WareHouses;
+        Console.WriteLine("First warehouse item count is " + WareHouses[0].Items.Count);
     }
     public async Task OnDeleteButtonClick(int id)
     {
@@ -127,7 +133,7 @@ else
     public async Task OnModalSave()
     {
         Modal.Close();
-        await baraaservice.EditItem(Modal.editingBaraa);
+        //await baraaservice.EditItem(Modal.editingBaraa);
         //Modal.ResetBaraa();
     }
 }

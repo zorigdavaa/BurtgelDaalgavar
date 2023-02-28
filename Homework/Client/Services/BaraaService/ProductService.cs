@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Homework.Shared.DTO;
+using Homework.Shared.Entities;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -16,8 +17,9 @@ namespace Homework.Client.Services.BaraaService
         public List<Product> Items { get; set; } = new List<Product>();
 
 
-        public async Task AddItemAsync(Product addingBaraa)
+        public async Task AddItemAsync(ProductDTO addingBaraa)
         {
+            Console.WriteLine(JsonSerializer.Serialize(addingBaraa));
             await _httpClient.PostAsJsonAsync("api/Product", addingBaraa);
 
             //HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Post, "api/Baraa");
@@ -26,7 +28,7 @@ namespace Homework.Client.Services.BaraaService
             //await _httpClient.SendAsync(httpRequest);
         }
 
-        public async Task EditItem(Product editingBaraa)
+        public async Task EditItem(ProductDTO editingBaraa)
         {
             await _httpClient.PutAsJsonAsync("api/Product/" + editingBaraa.Id, editingBaraa);
         }

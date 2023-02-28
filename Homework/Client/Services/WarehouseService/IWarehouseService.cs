@@ -1,5 +1,5 @@
-﻿using Homework.Shared;
-using Shared;
+﻿using Homework.Shared.DTO;
+using Homework.Shared.Entities;
 
 namespace Homework.Client.Services.WarehouseService
 {

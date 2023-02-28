@@ -1,4 +1,4 @@
-﻿using Homework.Shared;
+﻿using Homework.Shared.Entities;
 using System.Text.Json;
 
 namespace Homework.Client.Services.UserService

@@ -1,5 +1,4 @@
-﻿using Homework.Shared;
-using Shared;
+﻿using Homework.Shared.Entities;
 
 namespace Homework.Client.Services.UserService
 {

@@ -1,7 +1,6 @@
 using Homework.Server.Data;
 using System.Configuration;
 using Microsoft.AspNetCore.ResponseCompression;
-using Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseInMemoryDatabase("newDB"), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+    //options.UseInMemoryDatabase("newDB"), ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")))
 ;
 //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();

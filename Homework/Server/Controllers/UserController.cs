@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Homework.Shared;
-using Shared;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Homework.Server.Data;
+using Homework.Shared.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

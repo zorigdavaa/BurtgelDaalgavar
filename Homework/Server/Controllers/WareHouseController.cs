@@ -1,8 +1,8 @@
 ﻿using Homework.Server.Data;
-using Homework.Shared;
+using Homework.Shared.DTO;
+using Homework.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using System.Diagnostics;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,7 +23,7 @@ namespace ServerMVC.Controllers
         [HttpGet]
         public ActionResult<List<WareHouse>> Get()
         {
-            Debug.WriteLine("Count of warehouse if " + _db.WareHouse.ToList().Count);
+            //Debug.WriteLine("Count of warehouse if " + _db.WareHouse.ToList().Count);
             return Ok(_db.WareHouse.ToList());
         }
         // GET: api/<WareHouseController>/tra
@@ -62,32 +62,46 @@ namespace ServerMVC.Controllers
             Debug.WriteLine("Post Warehouse");
             WareHouse? fromWareHouse = await _db.WareHouse.FindAsync(transfer.FromWareHouseId);
             WareHouse? toWarehouse = await _db.WareHouse.FindAsync(transfer.ToWareHouseId);
-            Product? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Id == transfer.Product.Id);
-            Product? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Id == transfer.Product.Id);
+            Product? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Id == transfer.ProductId);
+            Product? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Id == transfer.ProductId);
             if (toWarehouse != null)
             {
                 if (transfer.FromWareHouseId != 0 && fromHouseProduct != null)
                 {
-                    if (fromHouseProduct.Count < transfer.Product.Count)
+                    if (fromHouseProduct.Count < transfer.ProductCount)
                     {
                         return BadRequest();
                     }
-                    fromHouseProduct.Count -= transfer.Product.Count;
+                    fromHouseProduct.Count -= transfer.ProductCount;
                     if (fromHouseProduct.Count < 1)
                     {
                         fromWareHouse.Items.Remove(fromHouseProduct);
                     }
+                    _db.SaveChanges();
                 }
+                Product addingProduct = new Product();
                 if (toWareHouseProduct == null)
                 {
-                    Product addingProduct = transfer.Product;
-                    addingProduct.Count = transfer.Product.Count;
+                    addingProduct = new Product
+                    {
+                        Id = transfer.ProductId,
+                        Name = transfer.ProductName,
+                        Count = transfer.ProductCount,
+                        Meas = transfer.ProductMeas,
+                        Price = transfer.ProductPrice,
+                        WareHouse = toWarehouse,
+                        WareHouseId = toWarehouse.Id
+                    };
                     toWarehouse.Items.Add(addingProduct);
+
                 }
                 else
                 {
-                    toWareHouseProduct.Count += transfer.Product.Count;
+                    toWareHouseProduct.Count += transfer.ProductCount;
                 }
+                _db.SaveChanges();
+                Debug.WriteLine("wareHouse Item Count is " + toWarehouse.Items.Count);
+                
                 _db.Transactions.Add(transfer);
                 _db.SaveChanges();
                 return Ok();

@@ -76,7 +76,7 @@ else
             </Title>
             <Body>
             <td><input type="text" @bind="Modal.editingBaraa.Name" /></td>
-            <br>    
+            <br>
             <td>
                 <select @bind="@Modal.editingBaraa.Meas" id="cars" name="cars">
                     <option value="@UnitMeas.Undefined">Undefined</option>
@@ -118,7 +118,16 @@ else
         if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
         {
             Console.WriteLine("Added " + newBaraa);
-            await baraaservice.AddItemAsync(newBaraa);
+            ProductDTO baraa = new ProductDTO
+                {
+                    Id = newBaraa.Id,
+                    Count = newBaraa.Count,
+                    Name = newBaraa.Name,
+                    Meas = newBaraa.Meas,
+                    Price = newBaraa.Price,
+                    //WareHouseId = newBaraa.WareHouseId.Value
+                };
+            await baraaservice.AddItemAsync(baraa);
             newBaraa = new Product();
             await RefreshBaraa();
         }
@@ -158,7 +167,16 @@ else
     public async Task OnModalSave()
     {
         Modal.Close();
-        await baraaservice.EditItem(Modal.editingBaraa);
+        ProductDTO baraa = new ProductDTO
+            {
+                Id = Modal.editingBaraa.Id,
+                Count = Modal.editingBaraa.Count,
+                Name = Modal.editingBaraa.Name,
+                Meas = Modal.editingBaraa.Meas,
+                Price = Modal.editingBaraa.Price,
+                WareHouseId = Modal.editingBaraa.WareHouseId.Value
+            };
+        await baraaservice.EditItem(baraa);
         //Modal.ResetBaraa();
         await RefreshBaraa();
     }

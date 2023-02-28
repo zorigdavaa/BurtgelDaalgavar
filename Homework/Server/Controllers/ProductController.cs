@@ -1,7 +1,8 @@
 ﻿using Homework.Server.Data;
+using Homework.Shared.DTO;
+using Homework.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shared;
 using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,10 +41,22 @@ namespace ServerMVC.Controllers
 
         // POST api/<BaraaController>
         [HttpPost]
-        public void Post([FromBody] Product addingBaraa)
+        public async Task<ActionResult> Post([FromBody] ProductDTO addingBaraa)
         {
-            _AppDb.Product.Add(addingBaraa);
+            WareHouse? wareHouse = await _AppDb.WareHouse.FindAsync(addingBaraa.WareHouseId);
+            Product product = new Product
+            {
+                Id = addingBaraa.Id,
+                Count = addingBaraa.Count,
+                Meas = addingBaraa.Meas,
+                Name = addingBaraa.Name,
+                Price = addingBaraa.Price,
+                WareHouseId = addingBaraa.WareHouseId,
+                WareHouse = wareHouse
+            };
+            _AppDb.Product.Add(product);
             _AppDb.SaveChanges();
+            return Ok();
         }
 
         // PUT api/<BaraaController>/5

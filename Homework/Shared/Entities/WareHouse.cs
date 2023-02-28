@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared
+namespace Homework.Shared.Entities
 {
     public class WareHouse
     {
         public int Id { get; set; }
-        public string Name { get; set; } = String.Empty;
+        public string Name { get; set; } = string.Empty;
         public List<Product> Items { get; set; } = new List<Product>();
         //public WareHouse(string _name, int _cap)
         //{

@@ -1,7 +1,8 @@
-﻿using Homework.Shared;
-using Shared;
+﻿using Homework.Shared.DTO;
+using Homework.Shared.Entities;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Homework.Client.Services.WarehouseService
 {
@@ -28,7 +29,11 @@ namespace Homework.Client.Services.WarehouseService
         }
         public async Task AddProductToWareHouse(TransactionProd addingBaraa)
         {
-            await _httpClient.PostAsJsonAsync("api/Warehouse", addingBaraa);
+            
+            Console.WriteLine(JsonSerializer.Serialize(addingBaraa));
+            var res = await _httpClient.PostAsJsonAsync("api/Warehouse", addingBaraa);
+            Console.WriteLine("is Success is " + res.StatusCode);
+            Console.WriteLine(await res.Content.ReadAsStringAsync());
         }
     }
 }

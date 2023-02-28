@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Homework.Shared
+namespace Homework.Shared.Entities
 {
     public class Userr
     {
