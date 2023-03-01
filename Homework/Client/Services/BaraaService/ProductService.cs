@@ -17,7 +17,7 @@ namespace Homework.Client.Services.BaraaService
         public List<Product> Items { get; set; } = new List<Product>();
 
 
-        public async Task AddItemAsync(ProductDTO addingBaraa)
+        public async Task AddItemAsync(Product addingBaraa)
         {
             Console.WriteLine(JsonSerializer.Serialize(addingBaraa));
             await _httpClient.PostAsJsonAsync("api/Product", addingBaraa);
@@ -28,7 +28,7 @@ namespace Homework.Client.Services.BaraaService
             //await _httpClient.SendAsync(httpRequest);
         }
 
-        public async Task EditItem(ProductDTO editingBaraa)
+        public async Task EditItem(Product editingBaraa)
         {
             await _httpClient.PutAsJsonAsync("api/Product/" + editingBaraa.Id, editingBaraa);
         }

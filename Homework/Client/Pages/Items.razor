@@ -19,6 +19,7 @@ else
         <table class="table">
             <thead>
                 <tr>
+                    <th>Code</th>
                     <th>Name</th>
                     <th>Measure Unit</th>
                     <th>Price</th>
@@ -28,6 +29,7 @@ else
                 @foreach (var baraa in Baraanuud)
                 {
                     <tr>
+                        <td>@baraa.Code</td>
                         <td>@baraa.Name</td>
                         <td>@baraa.Meas</td>
                         <td>@baraa.Price</td>
@@ -36,6 +38,7 @@ else
                     </tr>
                 }
                 <tr>
+                    <td></td>
                     <td><input type="text" @bind="@newBaraa.Name" /></td>
                     <td>
                         <select @bind="@newBaraa.Meas" id="cars" name="cars">
@@ -75,10 +78,14 @@ else
                 Edit Item
             </Title>
             <Body>
-            <td><input type="text" @bind="Modal.editingBaraa.Name" /></td>
+            <td>
+                <label>Name</label>
+                <input type="text" placeholder="Name" @bind-value="modalProduct.Name" />
+            </td>
             <br>
             <td>
-                <select @bind="@Modal.editingBaraa.Meas" id="cars" name="cars">
+                <label>Measure Unit</label>
+                <select @bind="modalProduct.Meas">
                     <option value="@UnitMeas.Undefined">Undefined</option>
                     <option value="@UnitMeas.Boodol">Boodol</option>
                     <option value="@UnitMeas.Box">Box</option>
@@ -89,7 +96,10 @@ else
                 </select>
             </td>
             <br>
-            <td><input type="number" @bind="@Modal.editingBaraa.Price" /></td>
+            <td>
+                <label>Price</label>
+                <input type="number" placeholder="Price" @bind-value="modalProduct.Price" />
+            </td>
             </Body>
         </Modal>
     </div>
@@ -102,6 +112,7 @@ else
     Product newBaraa = new Product();
     private List<WareHouse>? WareHouses;
     Modal Modal;
+    Product modalProduct = new Product();
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,13 +129,11 @@ else
         if (!String.IsNullOrEmpty(newBaraa.Name) && newBaraa.Price > 0 && newBaraa.Meas != UnitMeas.Undefined)
         {
             Console.WriteLine("Added " + newBaraa);
-            ProductDTO baraa = new ProductDTO
+            Product baraa = new Product
                 {
-                    Count = 10,
                     Name = newBaraa.Name,
                     Meas = newBaraa.Meas,
                     Price = newBaraa.Price,
-                    WareHouseId = 1
                 };
             await baraaservice.AddItemAsync(baraa);
             newBaraa = new Product();
@@ -145,7 +154,8 @@ else
     public async Task OnEditButtonClick(Product baraa)
     {
         Console.WriteLine("Edited " + baraa.Id);
-        await Task.Run(() => Modal.Open(baraa));
+        await Task.Run(() => Modal.Open());
+        modalProduct = new Product(baraa);
     }
     public async Task RefreshBaraa()
     {
@@ -166,13 +176,14 @@ else
     public async Task OnModalSave()
     {
         Modal.Close();
-        ProductDTO baraa = new ProductDTO
-            {
-                Id = Modal.editingBaraa.Id,
-                Name = Modal.editingBaraa.Name,
-                Meas = Modal.editingBaraa.Meas,
-                Price = Modal.editingBaraa.Price,
-            };
+        Product baraa = modalProduct;
+        //Product baraa = new Product
+        //    {
+        //        Id = Modal.modalObj.Id,
+        //        Name = Modal.modalObj.Name,
+        //        Meas = Modal.modalObj.Meas,
+        //        Price = Modal.modalObj.Price,
+        //    };
         await baraaservice.EditItem(baraa);
         //Modal.ResetBaraa();
         await RefreshBaraa();

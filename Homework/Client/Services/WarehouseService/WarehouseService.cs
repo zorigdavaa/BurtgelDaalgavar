@@ -29,11 +29,20 @@ namespace Homework.Client.Services.WarehouseService
         }
         public async Task AddProductToWareHouse(TransactionProd addingBaraa)
         {
-            
+
             Console.WriteLine(JsonSerializer.Serialize(addingBaraa));
             var res = await _httpClient.PostAsJsonAsync("api/Warehouse", addingBaraa);
             Console.WriteLine("is Success is " + res.StatusCode);
             Console.WriteLine(await res.Content.ReadAsStringAsync());
+        }
+
+        public async Task GetWareHousesWithItemsAsync()
+        {
+            var response = await _httpClient.GetFromJsonAsync<List<WareHouse>>("api/WareHouse/withItem");
+            if (response != null)
+            {
+                WareHouses = response;
+            }
         }
     }
 }

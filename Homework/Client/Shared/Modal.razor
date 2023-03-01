@@ -35,7 +35,6 @@
     [Parameter] public RenderFragment Body { get; set; }
     [Parameter] public RenderFragment? Footer { get; set; }
     [Parameter] public EventCallback<string> OnSaveChanges { get; set; }
-    [Parameter] public Product editingBaraa { get; set; } = new Product();
 
     public Guid Guid = Guid.NewGuid();
     public string ModalDisplay = "none;";
@@ -44,14 +43,6 @@
 
     public void Open()
     {
-        ModalDisplay = "block;";
-        ModalClass = "Show";
-        ShowBackdrop = true;
-        StateHasChanged();
-    }
-    public void Open(Product baraa)
-    {
-        editingBaraa = baraa;
         ModalDisplay = "block;";
         ModalClass = "Show";
         ShowBackdrop = true;
@@ -68,9 +59,5 @@
     public async Task SaveChanges()
     {
         await OnSaveChanges.InvokeAsync();
-    }
-    public void ResetBaraa()
-    {
-        editingBaraa = new Product();
     }
 }

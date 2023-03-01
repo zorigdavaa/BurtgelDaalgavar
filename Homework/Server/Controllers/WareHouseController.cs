@@ -18,6 +18,12 @@ namespace ServerMVC.Controllers
         {
             _db = db;
         }
+        // GET: api/<WareHouseController>
+        [HttpGet("withItem")]
+        public ActionResult<List<WareHouse>> GetWithItems()
+        {
+            return Ok(_db.WareHouse.Include(x => x.Items).ToList());
+        }
 
         // GET: api/<WareHouseController>
         [HttpGet]
@@ -60,8 +66,8 @@ namespace ServerMVC.Controllers
         public async Task<ActionResult> Post([FromBody] TransactionProd transfer)
         {
             Debug.WriteLine("Post Warehouse");
-            WareHouse? fromWareHouse = await _db.WareHouse.FindAsync(transfer.FromWareHouseId);
-            WareHouse? toWarehouse = await _db.WareHouse.FindAsync(transfer.ToWareHouseId);
+            WareHouse? fromWareHouse = await _db.WareHouse.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == transfer.FromWareHouseId);
+            WareHouse? toWarehouse = await _db.WareHouse.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == transfer.ToWareHouseId);
             WareProduct? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Code == transfer.ProductCode);
             WareProduct? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Code == transfer.ProductCode);
             Debug.WriteLineIf(toWareHouseProduct == null, "To is null ssssssssssssssss");
@@ -103,7 +109,7 @@ namespace ServerMVC.Controllers
                 Debug.WriteLine("wareHouse Item Count is " + toWarehouse.Items.Count);
 
                 _db.Transactions.Add(transfer);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return Ok();
             }
             return BadRequest();
