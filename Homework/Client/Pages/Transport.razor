@@ -12,7 +12,7 @@
 }
 else
 {
-    <div @onkeydown="HandleKeyDown">
+    <div>
         <h3>WareHouses</h3>
         <table class="table">
             @*            <thead>
@@ -69,28 +69,126 @@ else
                 }
             </tbody>
         </table>
-        <Modal @ref="Modal" OnSaveChanges="OnModalSave">
+        <Modal @ref="AddModal" OnSaveChanges="OnModalAddSave">
             <Title>
                 Add item to Warehouse
             </Title>
             <Body>
-                <select @bind="modalSelectedItemCode" id="cars" name="cars">
-                    @foreach (var item in Baraanuud)
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col col-sm-12">
+                            <select @bind="ModalSelectedItemCode" style="width: 25%">
+                                @foreach (var item in Baraanuud)
+                                {
+                                    <option value="@item.Code">@item.Code</option>
+                                }
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Count</label>
+                        </div>
+                        <div class="col">
+                            <input type="number" @bind-value="modalCount">
+                        </div>
+                    </div>
+                    @if (ModalBaraa != null)
                     {
-                        <option value="@item.Code">@item.Code</option>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Name</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@ModalBaraa.Name</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Price</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@ModalBaraa.Price</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Unit of Measure</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@ModalBaraa.Meas</label>
+                            </div>
+                        </div>
                     }
-                </select>
-                <label>Count</label>
-                <input type="number" @bind-value="modalCount">
-                <br>
-                <label>Name</label>
-                <label>@Baraanuud.FirstOrDefault(x=>x.Code == modalSelectedItemCode).Name</label>
-                <br>
-                <label>Price</label>
-                <label>@Baraanuud.FirstOrDefault(x=>x.Code == modalSelectedItemCode).Price</label>
-                <br>
-                <label>Unit of measure</label>
-                <label>@Baraanuud.FirstOrDefault(x=>x.Code == modalSelectedItemCode).Meas</label>
+                </div>
+            </Body>
+        </Modal>
+        <Modal @ref="TransferModal" OnSaveChanges="OnModalAddSave">
+            <Title>
+                Add item to Warehouse
+            </Title>
+            <Body>
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col col-sm-12">
+                            <select @bind="ModalSelectedItemCode" style="width: 25%">
+                                @foreach (var item in Baraanuud)
+                                {
+                                    <option value="@item.Code">@item.Code</option>
+                                }
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Count</label>
+                        </div>
+                        <div class="col">
+                            <input type="number" @bind-value="modalCount">
+                        </div>
+                    </div>
+                    @if (ModalBaraa != null)
+                    {
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Name</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@ModalBaraa.Name</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Price</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@ModalBaraa.Price</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Unit of Measure</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@ModalBaraa.Meas</label>
+                            </div>
+                        </div>
+                    }
+                </div>
             </Body>
         </Modal>
     </div>
@@ -102,9 +200,23 @@ else
     WareHouse wareHouse = new WareHouse();
     private List<WareHouse>? WareHouses;
     private List<Product>? Baraanuud;
-    Modal Modal;
-    Product ModalBaraa;
-    int modalSelectedItemCode = 1;
+    Modal AddModal;
+    Modal TransferModal;
+    Product ModalBaraa = new Product();
+    private int modalSelectedItemCode = 1;
+    public int ModalSelectedItemCode
+    {
+        get { return modalSelectedItemCode; }
+        set
+        {
+            if (modalSelectedItemCode != value)
+            {
+                RefreshModalBaraa(value);
+            }
+            modalSelectedItemCode = value;
+        }
+    }
+
     int modalCount = 0;//Used for product count on modal
 
     protected override async Task OnInitializedAsync()
@@ -114,53 +226,40 @@ else
         WareHouses = warehouseService.WareHouses;
         Baraanuud = baraaservice.Items;
     }
+    int lastClickedWarehouseId = 0;
     public void OnAddButtonClick(int warehouseId)
     {
-        Modal.Open();
-        ModalBaraa = new Product(Baraanuud[modalSelectedItemCode]);
-        //TransactionProd prod = new TransactionProd();
-        //prod.ProductName = "Chiher";
-        //prod.ProductPrice = 10;
-        //prod.ProductMeas = UnitMeas.KG;
-        //prod.ProductCount = 10;
-        //prod.ToWareHouseId = warehouseId;
-        //prod.FromWareHouseId = 0;
-        //prod.TransactionDate = DateTime.Now;
-        //prod.ProductCode = 1;
-        //await warehouseService.AddProductToWareHouse(prod);
-        //await warehouseService.GetWareHousesWithItemsAsync();
-        //WareHouses = warehouseService.WareHouses;
+        lastClickedWarehouseId = warehouseId;
+        RefreshModalBaraa(ModalSelectedItemCode);
+        AddModal.Open();
     }
-    public async Task OnDeleteButtonClick(int id)
+    public async Task OnModalAddSave()
     {
-        Console.WriteLine("Clicked " + id);
-        await baraaservice.RemoveItem(id);
-    }
-    public async Task OnEditButtonClick(Product baraa)
-    {
-        Console.WriteLine("Edited " + baraa.Id);
-        await Task.Run(() => Modal.Open());
-    }
-    public void HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key == "e")
+        if (ModalBaraa != null && Baraanuud.Any(x => x.Code == ModalBaraa.Code) && modalCount > 0)
         {
-            Modal.Open();
+            TransactionProd prod = new TransactionProd();
+            prod.ProductName = ModalBaraa.Name;
+            prod.ProductPrice = ModalBaraa.Price;
+            prod.ProductMeas = ModalBaraa.Meas;
+            prod.ProductCount = modalCount;
+            prod.ToWareHouseId = lastClickedWarehouseId;
+            prod.FromWareHouseId = 0;
+            prod.TransactionDate = DateTime.Now;
+            prod.ProductCode = ModalBaraa.Code;
+            await warehouseService.AddProductToWareHouse(prod);
+            await warehouseService.GetWareHousesWithItemsAsync();
+            WareHouses = warehouseService.WareHouses;
         }
-        else if (e.Key == "q")
-        {
-            Modal.Close();
-        }
-    }
-    public void OnItemSelected()
-    {
-
-    }
-    public async Task OnModalSave()
-    {
-        Modal.Close();
+        AddModal.Close();
         //await baraaservice.EditItem(Modal.editingBaraa);
         //Modal.ResetBaraa();
+    }
+    void RefreshModalBaraa(int val)
+    {
+        if (Baraanuud != null && Baraanuud.Any())
+        {
+            ModalBaraa = Baraanuud.FirstOrDefault(x => x.Code == val);
+        }
     }
 }
 

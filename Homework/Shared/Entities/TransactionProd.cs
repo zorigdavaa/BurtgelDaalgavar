@@ -12,7 +12,7 @@ namespace Homework.Shared.Entities
         public int ProductCode { get; set; }
         public string ProductName { get; set; } = String.Empty;
         public int ProductCount { get; set; }
-        public int ProductPrice { get; set; }
+        public double ProductPrice { get; set; }
         public UnitMeas ProductMeas { get; set; }
         public int FromWareHouseId { get; set; }
         public int ToWareHouseId { get; set; }
