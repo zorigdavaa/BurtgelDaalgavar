@@ -45,8 +45,9 @@ namespace ServerMVC.Controllers
         public async Task<ActionResult> Post([FromBody] Product addingBaraa)
         {
             //WareHouse? wareHouse = await _AppDb.WareHouse.FindAsync(addingBaraa.WareHouseId);
-            Product? lastOne = _AppDb.Product.LastOrDefault();
-            int code = lastOne != null ? lastOne.Code : 0;
+            //Product? lastOne = await _AppDb.Product.MaxAsync(x=>x.Code);
+            //int code = lastOne != null ? lastOne.Code : 0;
+            int code = await _AppDb.Product.MaxAsync(x => x.Code);
             Debug.WriteLine("Product post request received");
             Product product = new Product
             {

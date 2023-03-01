@@ -71,21 +71,26 @@ else
         </table>
         <Modal @ref="Modal" OnSaveChanges="OnModalSave">
             <Title>
-                Edit Item
+                Add item to Warehouse
             </Title>
             <Body>
-                <select @bind="@modalSelectedItemCode" id="cars" name="cars">
+                <select @bind="modalSelectedItemCode" id="cars" name="cars">
                     @foreach (var item in Baraanuud)
                     {
                         <option value="@item.Code">@item.Code</option>
                     }
                 </select>
+                <label>Count</label>
+                <input type="number" @bind-value="modalCount">
                 <br>
-                <label>@Baraanuud[modalSelectedItemCode].Name</label>
+                <label>Name</label>
+                <label>@Baraanuud.FirstOrDefault(x=>x.Code == modalSelectedItemCode).Name</label>
                 <br>
-                <label>@Baraanuud[modalSelectedItemCode].Price</label>
+                <label>Price</label>
+                <label>@Baraanuud.FirstOrDefault(x=>x.Code == modalSelectedItemCode).Price</label>
                 <br>
-                <label>@Baraanuud[modalSelectedItemCode].Meas</label>
+                <label>Unit of measure</label>
+                <label>@Baraanuud.FirstOrDefault(x=>x.Code == modalSelectedItemCode).Meas</label>
             </Body>
         </Modal>
     </div>
@@ -100,6 +105,7 @@ else
     Modal Modal;
     Product ModalBaraa;
     int modalSelectedItemCode = 1;
+    int modalCount = 0;//Used for product count on modal
 
     protected override async Task OnInitializedAsync()
     {
@@ -145,6 +151,10 @@ else
         {
             Modal.Close();
         }
+    }
+    public void OnItemSelected()
+    {
+
     }
     public async Task OnModalSave()
     {
