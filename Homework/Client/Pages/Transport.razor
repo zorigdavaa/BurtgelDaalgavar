@@ -39,6 +39,9 @@ else
                                             <div>
                                                 <button @onclick="()=> OnAddButtonClick(wareHouse.Id)">Add Products</button>
                                             </div>
+                                            <div>
+                                                <button @onclick="()=> OnSeeReportClick(wareHouse.Id)">See Report</button>
+                                            </div>
                                         </th>
                                         <th>Code</th>
                                         <th>Price</th>
@@ -57,8 +60,8 @@ else
                                             <td>@item.Count</td>
                                             <td>@item.Meas</td>
                                             <td>
-                                                <button>Sell</button>
-                                                <button>Transfer</button>
+                                                <button @onclick="()=> OnSellButtonClick(item)">Sell</button>
+                                                <button @onclick="()=> OnTranserClicked(item)">Transfer</button>
                                             </td>
                                         </tr>
                                     }
@@ -93,10 +96,10 @@ else
                             <label>Count</label>
                         </div>
                         <div class="col">
-                            <input type="number" @bind-value="modalCount">
+                            <input type="number" @bind-value="addmodalCount">
                         </div>
                     </div>
-                    @if (ModalBaraa != null)
+                    @if (AddModalBaraa != null)
                     {
 
                         <div class="row">
@@ -105,7 +108,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@ModalBaraa.Name</label>
+                                <label>@AddModalBaraa.Name</label>
                             </div>
                         </div>
                         <div class="row">
@@ -114,7 +117,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@ModalBaraa.Price</label>
+                                <label>@AddModalBaraa.Price</label>
                             </div>
                         </div>
                         <div class="row">
@@ -123,41 +126,38 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@ModalBaraa.Meas</label>
+                                <label>@AddModalBaraa.Meas</label>
                             </div>
                         </div>
                     }
                 </div>
             </Body>
         </Modal>
-        <Modal @ref="TransferModal" OnSaveChanges="OnModalAddSave">
+        <Modal @ref="TransferModal" OnSaveChanges="OnModalTransferSave">
             <Title>
-                Add item to Warehouse
+                Transfer item to Warehouse
             </Title>
             <Body>
                 <div class="container">
-
                     <div class="row">
                         <div class="col col-sm-12">
-                            <select @bind="ModalSelectedItemCode" style="width: 25%">
-                                @foreach (var item in Baraanuud)
+                            <select @bind="transferringWareId" style="width: 25%">
+                                @foreach (var item in WareHouses)
                                 {
-                                    <option value="@item.Code">@item.Code</option>
+                                    <option value="@item.Id">@item.Name</option>
                                 }
                             </select>
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="col">
                             <label>Count</label>
                         </div>
                         <div class="col">
-                            <input type="number" @bind-value="modalCount">
+                            <input type="number" @bind-value="transferModalCount">
                         </div>
                     </div>
-                    @if (ModalBaraa != null)
+                    @if (TransferBaraa != null)
                     {
 
                         <div class="row">
@@ -166,7 +166,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@ModalBaraa.Name</label>
+                                <label>@TransferBaraa.Name</label>
                             </div>
                         </div>
                         <div class="row">
@@ -175,7 +175,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@ModalBaraa.Price</label>
+                                <label>@TransferBaraa.Price</label>
                             </div>
                         </div>
                         <div class="row">
@@ -184,7 +184,73 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@ModalBaraa.Meas</label>
+                                <label>@TransferBaraa.Meas</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Count:</label>
+                            </div>
+                            <div class="col">
+
+                                <h3>@TransferBaraa.Count</h3>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </Body>
+        </Modal>
+        <Modal @ref="SellModal" OnSaveChanges="OnSellSave">
+            <Title>
+                Transfer item to Warehouse
+            </Title>
+            <Body>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <label>Count</label>
+                        </div>
+                        <div class="col">
+                            <input type="number" @bind-value="SellingModalCount">
+                        </div>
+                    </div>
+                    @if (TransferBaraa != null)
+                    {
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Name</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@TransferBaraa.Name</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Price</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@TransferBaraa.Price</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Unit of Measure</label>
+                            </div>
+                            <div class="col">
+
+                                <label>@TransferBaraa.Meas</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Count:</label>
+                            </div>
+                            <div class="col">
+
+                                <h3>@TransferBaraa.Count</h3>
                             </div>
                         </div>
                     }
@@ -202,7 +268,10 @@ else
     private List<Product>? Baraanuud;
     Modal AddModal;
     Modal TransferModal;
-    Product ModalBaraa = new Product();
+    Modal SellModal;
+    Product AddModalBaraa = new Product();
+    WareProduct TransferBaraa = new WareProduct();
+    WareProduct SellBaraa = new WareProduct();
     private int modalSelectedItemCode = 1;
     public int ModalSelectedItemCode
     {
@@ -211,13 +280,15 @@ else
         {
             if (modalSelectedItemCode != value)
             {
-                RefreshModalBaraa(value);
+                RefreshAddModalBaraa(value);
             }
             modalSelectedItemCode = value;
         }
     }
-
-    int modalCount = 0;//Used for product count on modal
+    int transferringWareId = 0;//Used for product count on modal
+    int transferModalCount = 0;//Used for product count on modal
+    int SellingModalCount = 0;//Used for product count on modal
+    int addmodalCount = 0;//Used for product count on modal
 
     protected override async Task OnInitializedAsync()
     {
@@ -230,35 +301,105 @@ else
     public void OnAddButtonClick(int warehouseId)
     {
         lastClickedWarehouseId = warehouseId;
-        RefreshModalBaraa(ModalSelectedItemCode);
+        RefreshAddModalBaraa(ModalSelectedItemCode);
         AddModal.Open();
     }
+    public void OnSeeReportClick(int warehouseId)
+    {
+        Console.WriteLine("Report");
+    }
+
+    public void OnTranserClicked(WareProduct wareProduct)
+    {
+        TransferBaraa = wareProduct;
+        TransferModal.Open();
+    }
+    public void OnSellButtonClick(WareProduct wareProduct)
+    {
+        SellBaraa = wareProduct;
+    }
+
     public async Task OnModalAddSave()
     {
-        if (ModalBaraa != null && Baraanuud.Any(x => x.Code == ModalBaraa.Code) && modalCount > 0)
+        if (AddModalBaraa != null && Baraanuud.Any(x => x.Code == AddModalBaraa.Code) && addmodalCount > 0)
         {
             TransactionProd prod = new TransactionProd();
-            prod.ProductName = ModalBaraa.Name;
-            prod.ProductPrice = ModalBaraa.Price;
-            prod.ProductMeas = ModalBaraa.Meas;
-            prod.ProductCount = modalCount;
+            prod.ProductName = AddModalBaraa.Name;
+            prod.ProductPrice = AddModalBaraa.Price;
+            prod.ProductMeas = AddModalBaraa.Meas;
+            prod.ProductCount = addmodalCount;
             prod.ToWareHouseId = lastClickedWarehouseId;
             prod.FromWareHouseId = 0;
             prod.TransactionDate = DateTime.Now;
-            prod.ProductCode = ModalBaraa.Code;
+            prod.ProductCode = AddModalBaraa.Code;
             await warehouseService.AddProductToWareHouse(prod);
             await warehouseService.GetWareHousesWithItemsAsync();
             WareHouses = warehouseService.WareHouses;
+        }
+        else
+        {
+            js.Alert("Алдаатай хүсэлт");
         }
         AddModal.Close();
         //await baraaservice.EditItem(Modal.editingBaraa);
         //Modal.ResetBaraa();
     }
-    void RefreshModalBaraa(int val)
+    public async Task OnModalTransferSave()
+    {
+        if (TransferBaraa != null && WareHouses.Any(x => x.Id == transferringWareId) && transferModalCount > 0 && transferModalCount <= TransferBaraa.Count)
+        {
+            TransactionProd prod = new TransactionProd();
+            prod.ProductName = TransferBaraa.Name;
+            prod.ProductPrice = TransferBaraa.Price;
+            prod.ProductMeas = TransferBaraa.Meas;
+            prod.ProductCount = transferModalCount;
+            prod.ToWareHouseId = transferringWareId;
+            prod.FromWareHouseId = TransferBaraa.WareHouseId;
+            prod.TransactionDate = DateTime.Now;
+            prod.ProductCode = TransferBaraa.Code;
+            await warehouseService.AddProductToWareHouse(prod);
+            await warehouseService.GetWareHousesWithItemsAsync();
+            WareHouses = warehouseService.WareHouses;
+        }
+        else
+        {
+            js.Alert("Алдаатай хүсэлт");
+        }
+        TransferModal.Close();
+        //await baraaservice.EditItem(Modal.editingBaraa);
+        //Modal.ResetBaraa();
+    }
+    public async Task OnSellSave()
+    {
+        if (SellBaraa != null && SellingModalCount > 0 && SellingModalCount <= SellBaraa.Count)
+        {
+            TransactionProd prod = new TransactionProd();
+            prod.ProductName = SellBaraa.Name;
+            prod.ProductPrice = SellBaraa.Price;
+            prod.ProductMeas = SellBaraa.Meas;
+            prod.ProductCount = SellingModalCount;//Todo
+            prod.ToWareHouseId = 0;//Todo
+            prod.FromWareHouseId = SellBaraa.WareHouseId;
+            prod.TransactionDate = DateTime.Now;
+            prod.ProductCode = SellBaraa.Code;
+            await warehouseService.AddProductToWareHouse(prod);
+            await warehouseService.GetWareHousesWithItemsAsync();
+            WareHouses = warehouseService.WareHouses;
+        }
+        else
+        {
+            js.Alert("Алдаатай хүсэлт");
+        }
+        SellModal.Close();
+        //await baraaservice.EditItem(Modal.editingBaraa);
+        //Modal.ResetBaraa();
+    }
+
+    void RefreshAddModalBaraa(int val)
     {
         if (Baraanuud != null && Baraanuud.Any())
         {
-            ModalBaraa = Baraanuud.FirstOrDefault(x => x.Code == val);
+            AddModalBaraa = Baraanuud.FirstOrDefault(x => x.Code == val);
         }
     }
 }
