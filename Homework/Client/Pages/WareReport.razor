@@ -9,10 +9,44 @@
 else
 {
     <h1>@wareHouse.Name</h1>
+    <select @bind="Type">
+        <option value="@SeeType.all">Бүх гүйлгээ</option>
+        <option value="@SeeType.incoming">Орсон гүйлгээ</option>
+        <option value="@SeeType.outgoing">Гарсан гүйлгээ</option>
+    </select>
     <div class="container">
         <div class="row">
-            <div>@ToTransactions.Count</div>
-            <div>@FromTransactions.Count</div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Id</td>
+                        <td>Product Name</td>
+                        <td>Product Code</td>
+                        <td>Product Price</td>
+                        <td>Date</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in SeeList)
+                    {
+                        <tr>
+
+                            <td>@item.Id</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.ProductCode</td>
+                            <td>@item.ProductPrice</td>
+                            <td>@item.TransactionDate</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Sum</td>
+                        <td>@SeeList.Sum(x=>x.ProductPrice)</td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
 }
@@ -24,7 +58,32 @@ else
     WareHouse wareHouse { get; set; }
     List<TransactionProd> ToTransactions = new List<TransactionProd>();
     List<TransactionProd> FromTransactions = new List<TransactionProd>();
-    
+    List<TransactionProd> AllTransactions;
+    List<TransactionProd> SeeList;
+    private SeeType type;
+    public SeeType Type
+    {
+        get { return type; }
+        set
+        {
+            if (type != value)
+            {
+                OnTypeChanged(value);
+            }
+            type = value;
+        }
+    }
+    void OnTypeChanged(SeeType changedType)
+    {
+        switch (changedType)
+        {
+            case SeeType.all: SeeList = AllTransactions.OrderBy(x => x.TransactionDate).ToList();break;
+            case SeeType.incoming: SeeList = AllTransactions.Where(x=>x.Id == warehouseId).OrderBy(x => x.TransactionDate).ToList(); break;
+            case SeeType.outgoing: SeeList = AllTransactions.Where(x => x.Id != warehouseId).OrderBy(x => x.TransactionDate).ToList(); break;
+            default:break;
+        }
+    }
+
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -33,5 +92,12 @@ else
         ToTransactions = res == null ? new List<TransactionProd>() : res;
         res = await warehouseService.GetTransactionFromWareHouse(warehouseId);
         FromTransactions = res == null ? new List<TransactionProd>() : res;
+        AllTransactions = new List<TransactionProd>(ToTransactions);
+        AllTransactions.AddRange(FromTransactions);
+        SeeList = AllTransactions.OrderBy(x => x.TransactionDate).ToList();
+    }
+    public enum SeeType
+    {
+        all, incoming, outgoing
     }
 }
