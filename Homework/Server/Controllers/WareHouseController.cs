@@ -18,12 +18,7 @@ namespace ServerMVC.Controllers
         {
             _db = db;
         }
-        // GET: api/<WareHouseController>
-        [HttpGet("withItem")]
-        public ActionResult<List<WareHouse>> GetWithItems()
-        {
-            return Ok(_db.WareHouse.Include(x => x.Items).ToList());
-        }
+
 
         // GET: api/<WareHouseController>
         [HttpGet]
@@ -31,6 +26,24 @@ namespace ServerMVC.Controllers
         {
             //Debug.WriteLine("Count of warehouse if " + _db.WareHouse.ToList().Count);
             return Ok(_db.WareHouse.ToList());
+        }
+        // GET: api/<WareHouseController>
+        [HttpGet("{id}")]
+        public ActionResult<WareHouse> GetWithId(int id)
+        {
+            //Debug.WriteLine("Count of warehouse if " + _db.WareHouse.ToList().Count);
+            WareHouse? house = _db.WareHouse.Find(id);
+            if (house == null)
+            {
+                return NotFound();
+            }
+            return Ok(house);
+        }
+        // GET: api/<WareHouseController>
+        [HttpGet("withItem")]
+        public ActionResult<List<WareHouse>> GetWithItems()
+        {
+            return Ok(_db.WareHouse.Include(x => x.Items).ToList());
         }
         // GET: api/<WareHouseController>/tra
         [HttpGet("tra")]
@@ -65,29 +78,28 @@ namespace ServerMVC.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] TransactionProd transfer)
         {
-            Debug.WriteLine("Post Warehouse");
             WareHouse? fromWareHouse = await _db.WareHouse.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == transfer.FromWareHouseId);
             WareHouse? toWarehouse = await _db.WareHouse.Include(x => x.Items).FirstOrDefaultAsync(x => x.Id == transfer.ToWareHouseId);
             WareProduct? fromHouseProduct = fromWareHouse?.Items.Find(x => x.Code == transfer.ProductCode);
             WareProduct? toWareHouseProduct = toWarehouse?.Items.Find(x => x.Code == transfer.ProductCode);
-            Debug.WriteLineIf(toWareHouseProduct == null, "To is null ssssssssssssssss");
+
+            if (fromWareHouse != null && fromHouseProduct != null)
+            {
+                if (fromHouseProduct.Count < transfer.ProductCount)
+                {
+                    return BadRequest();
+                }
+                fromHouseProduct.Count -= transfer.ProductCount;
+                if (fromHouseProduct.Count < 1)
+                {
+                    fromWareHouse.Items.Remove(fromHouseProduct);
+                }
+            }
             if (toWarehouse != null)
             {
-                if (transfer.FromWareHouseId != 0 && fromHouseProduct != null)
-                {
-                    if (fromHouseProduct.Count < transfer.ProductCount)
-                    {
-                        return BadRequest();
-                    }
-                    fromHouseProduct.Count -= transfer.ProductCount;
-                    if (fromHouseProduct.Count < 1)
-                    {
-                        fromWareHouse.Items.Remove(fromHouseProduct);
-                    }
-                }
-                WareProduct addingProduct = new WareProduct();
                 if (toWareHouseProduct == null)
                 {
+                    WareProduct addingProduct = new WareProduct();
                     addingProduct = new WareProduct
                     {
                         Name = transfer.ProductName,
@@ -100,19 +112,17 @@ namespace ServerMVC.Controllers
 
                     };
                     toWarehouse.Items.Add(addingProduct);
-                    //_db.WareHouseProducts.Add(addingProduct);
                 }
                 else
                 {
                     toWareHouseProduct.Count += transfer.ProductCount;
                 }
-                Debug.WriteLine("wareHouse Item Count is " + toWarehouse.Items.Count);
-
-                _db.Transactions.Add(transfer);
-                await _db.SaveChangesAsync();
-                return Ok();
             }
-            return BadRequest();
+            _db.Transactions.Add(transfer);
+            await _db.SaveChangesAsync();
+            return Ok();
+
+            //return BadRequest();
         }
 
         // PUT api/<WareHouseController>/5

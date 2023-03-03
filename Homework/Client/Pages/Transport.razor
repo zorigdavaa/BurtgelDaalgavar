@@ -3,6 +3,7 @@
 @inject IProductService baraaservice;
 @inject IWarehouseService warehouseService;
 @inject JsInterop js;
+@inject NavigationManager nav;
 
 <PageTitle>Transport</PageTitle>
 
@@ -214,7 +215,7 @@ else
                             <input type="number" @bind-value="SellingModalCount">
                         </div>
                     </div>
-                    @if (TransferBaraa != null)
+                    @if (SellBaraa != null)
                     {
 
                         <div class="row">
@@ -223,7 +224,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@TransferBaraa.Name</label>
+                                <label>@SellBaraa.Name</label>
                             </div>
                         </div>
                         <div class="row">
@@ -232,7 +233,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@TransferBaraa.Price</label>
+                                <label>@SellBaraa.Price</label>
                             </div>
                         </div>
                         <div class="row">
@@ -241,7 +242,7 @@ else
                             </div>
                             <div class="col">
 
-                                <label>@TransferBaraa.Meas</label>
+                                <label>@SellBaraa.Meas</label>
                             </div>
                         </div>
                         <div class="row">
@@ -250,7 +251,7 @@ else
                             </div>
                             <div class="col">
 
-                                <h3>@TransferBaraa.Count</h3>
+                                <h3>@SellBaraa.Count</h3>
                             </div>
                         </div>
                     }
@@ -306,7 +307,7 @@ else
     }
     public void OnSeeReportClick(int warehouseId)
     {
-        Console.WriteLine("Report");
+        nav.NavigateTo("report/" + warehouseId);
     }
 
     public void OnTranserClicked(WareProduct wareProduct)
@@ -316,6 +317,7 @@ else
     }
     public void OnSellButtonClick(WareProduct wareProduct)
     {
+        SellModal.Open();
         SellBaraa = wareProduct;
     }
 

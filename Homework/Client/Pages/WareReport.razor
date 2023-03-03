@@ -1,0 +1,37 @@
+﻿@page "/report/{warehouseId:int}"
+@inject IWarehouseService warehouseService;
+
+<h3>WareReport</h3>
+@if (wareHouse == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h1>@wareHouse.Name</h1>
+    <div class="container">
+        <div class="row">
+            <div>@ToTransactions.Count</div>
+            <div>@FromTransactions.Count</div>
+        </div>
+    </div>
+}
+
+
+@code
+{
+    [Parameter] public int warehouseId { get; set; }
+    WareHouse wareHouse { get; set; }
+    List<TransactionProd> ToTransactions = new List<TransactionProd>();
+    List<TransactionProd> FromTransactions = new List<TransactionProd>();
+    
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        wareHouse = await warehouseService.GetWareHouseAsync(warehouseId);
+        var res = await warehouseService.GetTransactionToWareHouse(warehouseId);
+        ToTransactions = res == null ? new List<TransactionProd>() : res;
+        res = await warehouseService.GetTransactionFromWareHouse(warehouseId);
+        FromTransactions = res == null ? new List<TransactionProd>() : res;
+    }
+}
